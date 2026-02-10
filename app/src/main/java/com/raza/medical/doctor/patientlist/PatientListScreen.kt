@@ -1,5 +1,7 @@
 package com.raza.medical.doctor.patientlist
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +33,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PatientListScreen(
+    onPatientClick: (String) -> Unit,
     viewModel: PatientListViewModel = viewModel()
 ) {
     val patients by viewModel.patients.collectAsState()
@@ -57,9 +60,11 @@ fun PatientListScreen(
     ) { padding ->
 
 
-        Column(modifier = Modifier
-            .padding(padding)
-            .fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+        ) {
 
             OutlinedTextField(
                 value = searchQuery,
@@ -85,7 +90,17 @@ fun PatientListScreen(
                     .fillMaxSize()
             ) {
                 items(filteredPatients) { patient ->
-                    PatientRow(patient)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onPatientClick(patient.id)
+                            }
+                    ) {
+
+                        PatientRow(patient)
+                    }
+
                     Divider()
                 }
             }
