@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.raza.medical.doctor.patientdetails.PatientDetailsScreen
 import com.raza.medical.doctor.patientlist.PatientListScreen
+import com.raza.medical.doctor.prescriptionlist.PrescriptionListScreen
 
 @Composable
 fun DoctorNavGraph() {
@@ -41,6 +42,32 @@ fun DoctorNavGraph() {
 
             PatientDetailsScreen(
                 patientId = patientId,
+                onBack = {
+                    navController.popBackStack()
+                },
+                onViewPrescription = { id ->
+                    navController.navigate("prescriptions/$id")
+                }
+            )
+        }
+
+        composable(
+            route = "prescriptions/{id}",
+            arguments = listOf(
+                navArgument(
+                    name = "id"
+                ) {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+
+            val patientId = backStackEntry
+                .arguments
+                ?.getString("id")!!
+
+            PrescriptionListScreen(
+                patientId,
                 onBack = {
                     navController.popBackStack()
                 }

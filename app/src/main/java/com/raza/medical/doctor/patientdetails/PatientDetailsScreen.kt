@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -31,7 +32,8 @@ import com.raza.medical.common.domain.model.Patient
 @Composable
 fun PatientDetailsScreen(
     patientId: String,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onViewPrescription: (String) -> Unit
 ) {
 
     val repository = RepositoryProvider.providePatientRepository()
@@ -80,6 +82,19 @@ fun PatientDetailsScreen(
                 Text("Age: ${it.age}")
                 Text("Gender: ${it.gender}")
                 Text("Last Visit: ${it.lastVisitDate}")
+
+                Spacer(
+                    modifier =
+                        Modifier.height(24.dp)
+                )
+
+                Button(onClick = {
+                    onViewPrescription(patientId)
+                }) {
+                    Text(
+                        "View Prescriptions"
+                    )
+                }
             }
 
         } ?: Box(
