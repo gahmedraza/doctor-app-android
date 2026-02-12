@@ -1,5 +1,6 @@
 package com.raza.medical.doctor.prescriptionlist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +33,8 @@ fun PrescriptionListScreen(
     patientId: String,
 
     onBack: () -> Unit,
+
+    onPrescriptionClick: (Prescription) -> Unit,
 
     viewModel: PrescriptionListViewModel = viewModel()
 
@@ -68,7 +71,12 @@ fun PrescriptionListScreen(
                 .fillMaxSize()
         ) {
             items(prescriptions) { prescription ->
-                PrescriptionRow(prescription)
+                PrescriptionRow(
+                    prescription = prescription,
+                    onClick = {
+                        onPrescriptionClick(prescription)
+                    }
+                )
                 Divider()
             }
         }
@@ -77,7 +85,10 @@ fun PrescriptionListScreen(
 }
 
 @Composable
-fun PrescriptionRow(prescription: Prescription) {
+fun PrescriptionRow(
+    prescription: Prescription,
+    onClick: () -> Unit
+) {
     val formatter = DateTimeFormatter.ofPattern(
         "dd MMM yyyy"
     )
@@ -85,6 +96,7 @@ fun PrescriptionRow(prescription: Prescription) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(16.dp)
     ) {
         Text(
