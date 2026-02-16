@@ -33,7 +33,7 @@ fun PrescriptionDetailScreen(
     onBack: () -> Unit
 ) {
     val repository = RepositoryProvider.providePrescriptionRepository()
-    var prescription by remember { mutableStateOf<Prescription?>(null)}
+    var prescription by remember { mutableStateOf<Prescription?>(null) }
 
     LaunchedEffect(prescriptionId) {
         prescription = repository.getPrescriptionById(prescriptionId)
@@ -79,6 +79,47 @@ fun PrescriptionDetailScreen(
                 Text(text = rx.date.format(formatter))
 
                 //Medicine list
+                Spacer(
+                    modifier =
+                        Modifier.height(16.dp)
+                )
+
+                Text(
+                    text =
+                        "Medicines"
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
+
+                rx.medicines.forEach { medicine ->
+                    Column {
+                        Text(
+                            text =
+                                medicine.name
+                        )
+
+                        Spacer(
+                            modifier =
+                                Modifier.height(4.dp)
+                        )
+
+                        Text(
+                            text =
+                                "Dosage: ${medicine.dosage}"
+                        )
+                        Text(
+                            text =
+                                "Frequency: ${medicine.frequency}"
+                        )
+                    }
+                    Spacer(
+                        modifier = Modifier
+                            .height(12.dp)
+                    )
+                }
             }
         } ?: Column(
             modifier = Modifier
@@ -86,8 +127,10 @@ fun PrescriptionDetailScreen(
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier
-                .height(16.dp))
+            Spacer(
+                modifier = Modifier
+                    .height(16.dp)
+            )
             CircularProgressIndicator()
         }
     }
