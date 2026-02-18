@@ -16,6 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginPage() {
@@ -108,12 +111,14 @@ fun LoginPage() {
                         showPasswordError = false
                     }
 
-                    /*CoroutineScope(Dispatchers.IO).launch {
-                        val request = LoginRequest()
-                        request.username = username
-                        request.password = password
-                        makeLoginCall(request)
-                    }*/
+                    if (!showUsernameError && !showPasswordError) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val request = LoginRequest()
+                            request.email = username
+                            request.password = password
+                            makeLoginCall(request)
+                        }
+                    }
                 }) {
 
                 Text(
