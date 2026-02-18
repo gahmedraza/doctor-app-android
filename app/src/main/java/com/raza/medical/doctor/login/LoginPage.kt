@@ -91,25 +91,13 @@ fun LoginPage() {
 
                 onClick = {
 
-                    if (username.isEmpty()) {
-                        showUsernameError = true
-                        usernameErrorMessage = "Username cannot be empty"
-                    } else if (username.length < 5) {
-                        showUsernameError = true
-                        usernameErrorMessage = "Username cannot be less than 5 characters"
-                    } else {
-                        showUsernameError = false
-                    }
+                    var validation = validateUsername(username)
+                    showUsernameError = validation.showError
+                    usernameErrorMessage = validation.errorMessage
 
-                    if (password.isEmpty()) {
-                        showPasswordError = true
-                        passwordErrorMessage = "Password cannot be empty"
-                    } else if (password.length < 5) {
-                        showPasswordError = true
-                        passwordErrorMessage = "Password cannot be less than 5 characters"
-                    } else {
-                        showPasswordError = false
-                    }
+                    validation = validatePassword(password)
+                    showPasswordError = validation.showError
+                    passwordErrorMessage = validation.errorMessage
 
                     if (!showUsernameError && !showPasswordError) {
                         CoroutineScope(Dispatchers.IO).launch {
@@ -127,6 +115,47 @@ fun LoginPage() {
             }
         }
     }
+}
+
+fun validateUsername(username: String): Validator {
+    val userValidator = Validator()
+
+    userValidator.apply {
+        if (username.isEmpty()) {
+            showError = true
+            errorMessage = "Username cannot be empty"
+        } else if (username.length < 5) {
+            showError = true
+            errorMessage = "Username cannot be less than 5 characters"
+        } else {
+            showError = false
+        }
+    }
+
+    return userValidator
+}
+
+fun validatePassword(password: String): Validator {
+    val validator = Validator()
+
+    validator.apply {
+        if (password.isEmpty()) {
+            showError = true
+            errorMessage = "Password cannot be empty"
+        } else if (password.length < 5) {
+            showError = true
+            errorMessage = "Password cannot be less than 5 characters"
+        } else {
+            showError = false
+        }
+    }
+
+    return validator
+}
+
+class Validator {
+    var showError: Boolean = null
+    var errorMessage: String = null
 }
 
 @Preview(showBackground = true)
