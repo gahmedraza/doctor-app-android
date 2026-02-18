@@ -1,10 +1,18 @@
 package com.raza.medical.doctor.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -15,9 +23,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.raza.medical.doctor.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,13 +52,43 @@ fun LoginPage(
                 .fillMaxSize()
                 .padding(padding)
                 .padding(
-                    top = 200.dp,
                     start = 20.dp,
                     end = 20.dp
                 )
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
+
+            Image(
+                painter = painterResource(
+                    id =
+                        R.drawable.baseline_medical_services_24
+                ),
+                contentDescription = "login icon",
+                modifier = Modifier
+                    .padding(30.dp)
+                    .size(120.dp),
+                colorFilter = ColorFilter.tint(Color(0xFF000000))
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(top = 20.dp),
+                text = "Welcome back",
+                fontSize = 25.sp,
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(top = 10.dp),
+                text = "Sign in to continue",
+                fontSize = 20.sp
+            )
+
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 50.dp),
                 label = { Text("username") },
                 isError = showUsernameError,
                 value = username,
@@ -66,8 +109,13 @@ fun LoginPage(
                 )
             }
 
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(
+                        top =
+                            20.dp,
+                    )
+                    .fillMaxWidth(),
                 label = { Text("password") },
                 value = password,
                 isError = showPasswordError,
@@ -118,20 +166,26 @@ fun LoginPage(
                 )
             }
 
-            Text(
+            HorizontalDivider(
                 modifier = Modifier
                     .padding(
-                        top = 100.dp
+                        top = 20.dp
                     )
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(top = 20.dp)
                     .align(Alignment.CenterHorizontally),
-                text = "For a new account",
+                text = "Need a new account?",
                 fontSize = 12.sp
             )
 
             Button(
                 modifier = Modifier
                     .padding(
-                        top = 10.dp
+                        top = 10.dp,
+                        bottom = 10.dp
                     )
                     .align(Alignment.CenterHorizontally),
 
@@ -146,47 +200,6 @@ fun LoginPage(
             }
         }
     }
-}
-
-fun validateUsername(username: String): Validator {
-    val userValidator = Validator()
-
-    userValidator.apply {
-        if (username.isEmpty()) {
-            showError = true
-            errorMessage = "Username cannot be empty"
-        } else if (username.length < 5) {
-            showError = true
-            errorMessage = "Username cannot be less than 5 characters"
-        } else {
-            showError = false
-        }
-    }
-
-    return userValidator
-}
-
-fun validatePassword(password: String): Validator {
-    val validator = Validator()
-
-    validator.apply {
-        if (password.isEmpty()) {
-            showError = true
-            errorMessage = "Password cannot be empty"
-        } else if (password.length < 5) {
-            showError = true
-            errorMessage = "Password cannot be less than 5 characters"
-        } else {
-            showError = false
-        }
-    }
-
-    return validator
-}
-
-class Validator {
-    var showError: Boolean = false
-    var errorMessage: String = ""
 }
 
 @Preview(showBackground = true)
