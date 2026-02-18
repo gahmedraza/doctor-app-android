@@ -154,8 +154,8 @@ fun validatePassword(password: String): Validator {
 }
 
 class Validator {
-    var showError: Boolean = null
-    var errorMessage: String = null
+    var showError: Boolean = false
+    var errorMessage: String = ""
 }
 
 @Preview(showBackground = true)
