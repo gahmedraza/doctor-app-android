@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.raza.medical.doctor.login.LoginPage
+import com.raza.medical.doctor.login.SignupPage
 import com.raza.medical.doctor.patientdetails.PatientDetailsScreen
 import com.raza.medical.doctor.patientlist.PatientListScreen
 import com.raza.medical.doctor.prescriptiondetail.PrescriptionDetailScreen
@@ -21,8 +22,16 @@ fun DoctorNavGraph() {
         startDestination = "login"
     ) {
 
+        composable("signup") {
+            SignupPage()
+        }
+
         composable("login") {
-            LoginPage()
+            LoginPage(
+                onSignup = {
+                    navController.navigate("/signup")
+                }
+            )
         }
 
         composable("patients") {

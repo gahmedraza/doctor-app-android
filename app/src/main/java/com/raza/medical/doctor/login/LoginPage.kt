@@ -13,15 +13,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginPage() {
+fun LoginPage(
+    onSignup: () -> Unit
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showUsernameError by remember { mutableStateOf(false) }
@@ -35,7 +39,7 @@ fun LoginPage() {
                 .fillMaxSize()
                 .padding(padding)
                 .padding(
-                    top = 300.dp,
+                    top = 200.dp,
                     start = 20.dp,
                     end = 20.dp
                 )
@@ -87,7 +91,7 @@ fun LoginPage() {
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 300.dp),
+                    .padding(top = 200.dp),
 
                 onClick = {
 
@@ -111,6 +115,33 @@ fun LoginPage() {
 
                 Text(
                     text = "Login"
+                )
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(
+                        top = 100.dp
+                    )
+                    .align(Alignment.CenterHorizontally),
+                text = "For a new account",
+                fontSize = 12.sp
+            )
+
+            Button(
+                modifier = Modifier
+                    .padding(
+                        top = 10.dp
+                    )
+                    .align(Alignment.CenterHorizontally),
+
+                onClick = {
+                    onSignup()
+                }) {
+
+                Text(
+                    text = "Signup",
+                    fontSize = 12.sp
                 )
             }
         }
@@ -161,5 +192,5 @@ class Validator {
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    LoginPage()
+    LoginPage({})
 }
