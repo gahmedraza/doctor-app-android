@@ -75,7 +75,7 @@ fun LoginPage(
                 modifier = Modifier
                     .padding(top = 20.dp),
                 text = "Welcome back",
-                fontSize = 25.sp,
+                fontSize = 25.sp
             )
 
             Text(
@@ -204,6 +204,8 @@ fun LoginPage(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
-    LoginPage({})
+fun LoginPreview() {
+    LoginPage {
+
+    }
 }

@@ -13,8 +13,12 @@ import java.net.URL
 const val DEBUG_TAG = "Networking"
 const val API_KEY = "reqres_1377da5d7b4e4620b44f573493bca1a9"
 const val BASE_URL = "https://reqres.in/api"
-const val AUTH = "/register"
-const val LOGIN_URL = BASE_URL + AUTH
+const val LOGIN = "/register"
+
+const val SIGNUP = "/auth/register"
+const val LOGIN_URL = BASE_URL + LOGIN
+
+const val SIGNUP_URL = BASE_URL + SIGNUP
 
 class LoginViewModel : ViewModel() {
 
@@ -26,6 +30,22 @@ fun makeLoginCall(request: LoginRequest): LoginResponse? {
     val stringResponse = makeNetworkRequest(LOGIN_URL, request, RequestType.POST)
 
     Logger.d(stringResponse, DEBUG_TAG)
+
+    response = Gson().fromJson(stringResponse,
+        LoginResponse::class.java)
+
+    return response
+}
+
+fun makeRegisterCall(request: SignupRequest): SignupResponse? {
+    var response: SignupResponse? = null
+
+    val stringResponse = makeNetworkRequest(SIGNUP_URL, request, RequestType.POST)
+
+    Logger.d(stringResponse, DEBUG_TAG)
+
+    response = Gson().fromJson(stringResponse,
+        SignupResponse::class.java)
 
     return response
 }
@@ -39,7 +59,7 @@ enum class HeaderKeys(val value: String) {
     API_KEY("x-api-key")
 }
 
-fun makeNetworkRequest(url: String, request: LoginRequest, requestType: RequestType): String {
+fun makeNetworkRequest(url: String, request: Request, requestType: RequestType): String {
     val url = URL(url)
     val connection = url.openConnection() as HttpURLConnection
 
@@ -91,7 +111,7 @@ fun readNetworkStream(stream: InputStream): String {
 }
 
 
-class LoginRequest {
+class LoginRequest: Request {
     //var username: String? = null
 
     var email: String? = null
@@ -101,4 +121,19 @@ class LoginRequest {
 class LoginResponse {
     var userId: String? = null
     var sessionToken: String? = null
+}
+
+class SignupRequest: Request {
+    var username: String? = null
+    var email: String? = null
+    var password: String? = null
+}
+
+class SignupResponse {
+    var userId: String? = null
+    var sessionToken: String? = null
+}
+
+interface Request {
+
 }

@@ -23,13 +23,17 @@ fun DoctorNavGraph() {
     ) {
 
         composable("signup") {
-            SignupPage()
+            SignupPage(
+                onLogin = {
+                    navController.navigate("login")
+                }
+            )
         }
 
         composable("login") {
             LoginPage(
                 onSignup = {
-                    navController.navigate("/signup")
+                    navController.navigate("signup")
                 }
             )
         }
