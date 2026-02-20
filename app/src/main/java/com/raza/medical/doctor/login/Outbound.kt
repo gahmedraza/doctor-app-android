@@ -1,0 +1,14 @@
+package com.raza.medical.doctor.login
+
+const val API_KEY = "reqres_1377da5d7b4e4620b44f573493bca1a9"
+
+//const val BASE_URL = "https://reqres.in/api"
+
+//const val BASE_URL = "http://10.0.2.2:8080"
+const val BASE_URL = "http://192.168.1.3:8080"
+const val AUTH = "auth"
+const val REGISTER = "register"
+const val LOGIN = "login"
+
+const val REGISTER_URL = "$BASE_URL/$AUTH/$REGISTER"
+const val LOGIN_URL = "$BASE_URL/$AUTH/$LOGIN"

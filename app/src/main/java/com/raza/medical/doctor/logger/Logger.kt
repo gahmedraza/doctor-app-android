@@ -9,11 +9,11 @@ import android.util.Log
 const val DEFAULT_TAG = "debug"
 
 object Logger {
-    fun d(
-        message: String,
+    fun w(
+        message: String?,
         tag: String = DEFAULT_TAG
     ) {
 
-        Log.w(tag, message)
+        Log.w(tag, message ?: "--------")
     }
 }

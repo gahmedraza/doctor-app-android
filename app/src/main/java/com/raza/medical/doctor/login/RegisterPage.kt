@@ -26,9 +26,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.raza.medical.doctor.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun SignupPage(
+fun RegisterPage(
     onLogin: () -> Unit
 ) {
     var username by remember { mutableStateOf<String>("") }
@@ -121,17 +124,19 @@ fun SignupPage(
                     .fillMaxWidth()
                     .padding(top = 120.dp),
                 onClick = {
-                    //todo
-                    val request = SignupRequest()
-                    request.username = username
-                    request.email = email
-                    request.password = password
-                    makeRegisterCall(request)
+                    CoroutineScope(context = Dispatchers.IO).launch {
+                        //
+                        val request = RegisterRequest()
+                        request.username = username
+                        request.email = email
+                        request.password = password
+                        makeRegisterCall(request)
+                    }
                 }
             ) {
                 Text(
                     text =
-                        "Signup"
+                        "Register"
                 )
             }
 
@@ -170,8 +175,8 @@ fun SignupPage(
 
 @Preview(showBackground = true)
 @Composable
-fun SignupPreview() {
-    SignupPage {
+fun RegisterPreview() {
+    RegisterPage {
 
     }
 }

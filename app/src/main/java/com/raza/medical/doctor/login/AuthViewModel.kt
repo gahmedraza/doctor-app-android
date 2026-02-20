@@ -1,6 +1,5 @@
 package com.raza.medical.doctor.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.raza.medical.doctor.logger.Logger
@@ -11,16 +10,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 const val DEBUG_TAG = "Networking"
-const val API_KEY = "reqres_1377da5d7b4e4620b44f573493bca1a9"
-const val BASE_URL = "https://reqres.in/api"
-const val LOGIN = "/register"
 
-const val SIGNUP = "/auth/register"
-const val LOGIN_URL = BASE_URL + LOGIN
-
-const val SIGNUP_URL = BASE_URL + SIGNUP
-
-class LoginViewModel : ViewModel() {
+class AuthViewModel : ViewModel() {
 
 }
 
@@ -29,7 +20,7 @@ fun makeLoginCall(request: LoginRequest): LoginResponse? {
 
     val stringResponse = makeNetworkRequest(LOGIN_URL, request, RequestType.POST)
 
-    Logger.d(stringResponse, DEBUG_TAG)
+    Logger.w(stringResponse, DEBUG_TAG)
 
     response = Gson().fromJson(stringResponse,
         LoginResponse::class.java)
@@ -37,15 +28,15 @@ fun makeLoginCall(request: LoginRequest): LoginResponse? {
     return response
 }
 
-fun makeRegisterCall(request: SignupRequest): SignupResponse? {
-    var response: SignupResponse? = null
+fun makeRegisterCall(request: RegisterRequest): RegisterResponse? {
+    var response: RegisterResponse? = null
 
-    val stringResponse = makeNetworkRequest(SIGNUP_URL, request, RequestType.POST)
+    val stringResponse = makeNetworkRequest(REGISTER_URL, request, RequestType.POST)
 
-    Logger.d(stringResponse, DEBUG_TAG)
+    Logger.w(stringResponse, DEBUG_TAG)
 
     response = Gson().fromJson(stringResponse,
-        SignupResponse::class.java)
+        RegisterResponse::class.java)
 
     return response
 }
@@ -59,7 +50,7 @@ enum class HeaderKeys(val value: String) {
     API_KEY("x-api-key")
 }
 
-fun makeNetworkRequest(url: String, request: Request, requestType: RequestType): String {
+fun makeNetworkRequest(url: String, request: Request, requestType: RequestType): String? {
     val url = URL(url)
     val connection = url.openConnection() as HttpURLConnection
 
@@ -85,7 +76,9 @@ fun makeNetworkRequest(url: String, request: Request, requestType: RequestType):
     if (responseCode > HttpURLConnection.HTTP_PARTIAL) {
         val error = readNetworkStream(connection.errorStream)
 
-        Logger.d(error)
+        Logger.w(error)
+        return null // Return error and success type based
+        //convert to response model using type param
     }
 
     val response = readNetworkStream(connection.getInputStream())
@@ -123,13 +116,13 @@ class LoginResponse {
     var sessionToken: String? = null
 }
 
-class SignupRequest: Request {
+class RegisterRequest: Request {
     var username: String? = null
     var email: String? = null
     var password: String? = null
 }
 
-class SignupResponse {
+class RegisterResponse {
     var userId: String? = null
     var sessionToken: String? = null
 }
