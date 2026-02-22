@@ -10,6 +10,7 @@ import com.raza.medical.doctor.login.ForgotPasswordScreen
 import com.raza.medical.doctor.login.LoginPage
 import com.raza.medical.doctor.login.OtpPage
 import com.raza.medical.doctor.login.RegisterPage
+import com.raza.medical.doctor.login.ResetPasswordScreen
 import com.raza.medical.doctor.patientdetails.PatientDetailsScreen
 import com.raza.medical.doctor.patientlist.PatientListScreen
 import com.raza.medical.doctor.prescriptiondetail.PrescriptionDetailScreen
@@ -21,51 +22,56 @@ fun DoctorNavGraph() {
 
     NavHost(
         navController,
-        startDestination = "forgotPassword"
+        startDestination = Destinations.ForgotPassword.value
     ) {
-        composable("forgotPassword") {
+
+        composable(Destinations.ResetPassword.value) {
+            ResetPasswordScreen()
+        }
+
+        composable(Destinations.ForgotPassword.value) {
             ForgotPasswordScreen()
         }
 
-        composable("verifyOtp") {
+        composable(Destinations.VerifyOtp.value) {
             OtpPage(
                 onOtpComplete = { otp ->
-                    navController.navigate("login")
+                    navController.navigate(Destinations.Login.value)
                 }
             )
         }
 
-        composable("register") {
+        composable(Destinations.Register.value) {
             RegisterPage(
                 onLogin = {
-                    navController.navigate("login")
+                    navController.navigate(Destinations.Login.value)
                 },
                 onRegisterSuccess = {
-                    navController.navigate("verifyOtp")
+                    navController.navigate(Destinations.VerifyOtp.value)
                 }
             )
         }
 
-        composable("login") {
+        composable(Destinations.Login.value) {
             LoginPage(
                 onRegister = {
-                    navController.navigate("register")
+                    navController.navigate(Destinations.Register.value)
                 }
             )
         }
 
-        composable("patients") {
+        composable(Destinations.Patients.value) {
             PatientListScreen(
                 onPatientClick = { patientId ->
-                    navController.navigate("patientDetails/$patientId")
+                    navController.navigate("${Destinations.PatientDetails.value}/$patientId")
                 }
             )
         }
 
         composable(
-            route = "patientDetails/{patientId}",
+            route = "${Destinations.PatientDetails.value}/{${Params.PatientId.value}}",
             arguments = listOf(
-                navArgument("patientId") {
+                navArgument("${Params.PatientId.value}") {
                     type = NavType.StringType
                 }
             )
@@ -73,7 +79,7 @@ fun DoctorNavGraph() {
 
             val patientId = backStackEntry
                 .arguments
-                ?.getString("patientId")!!
+                ?.getString("${Params.PatientId.value}")!!
 
             PatientDetailsScreen(
                 patientId = patientId,
@@ -81,16 +87,16 @@ fun DoctorNavGraph() {
                     navController.popBackStack()
                 },
                 onViewPrescription = { id ->
-                    navController.navigate("prescriptions/$id")
+                    navController.navigate("${Destinations.Prescriptions.value}/$id")
                 }
             )
         }
 
         composable(
-            route = "prescriptions/{id}",
+            route = "${Destinations.Prescriptions.value}/{${Params.Id.value}}",
             arguments = listOf(
                 navArgument(
-                    name = "id"
+                    name = "${Params.Id.value}"
                 ) {
                     type = NavType.StringType
                 }
@@ -99,7 +105,7 @@ fun DoctorNavGraph() {
 
             val patientId = backStackEntry
                 .arguments
-                ?.getString("id")!!
+                ?.getString("${Params.Id.value}")!!
 
             PrescriptionListScreen(
                 patientId,
@@ -108,17 +114,17 @@ fun DoctorNavGraph() {
                 },
                 onPrescriptionClick = { prescription ->
                     navController.navigate(
-                        "prescriptionDetails/${prescription.id}"
+                        "${Destinations.PrescriptionDetails.value}/${prescription.id}"
                     )
                 }
             )
         }
 
         composable(
-            route = "prescriptionDetails/{prescriptionId}",
+            route = "${Destinations.PrescriptionDetails.value}/{${Params.PrescriptionId.value}}",
             arguments = listOf(
                 navArgument(
-                    name = "prescriptionId"
+                    name = "${Params.PrescriptionId.value}"
                 ) {
                     type = NavType.StringType
                 }
@@ -128,7 +134,7 @@ fun DoctorNavGraph() {
             val prescriptionId =
                 backStackEntry
                     .arguments
-                    ?.getString("prescriptionId")
+                    ?.getString("${Params.PrescriptionId.value}")
 
             PrescriptionDetailScreen(
                 prescriptionId!!
@@ -137,4 +143,22 @@ fun DoctorNavGraph() {
             }
         }
     }
+}
+
+enum class Destinations(val value: String) {
+    ForgotPassword("forgotPassword"),
+    ResetPassword("resetPassword"),
+    VerifyOtp("verifyOtp"),
+    Register("register"),
+    Login("login"),
+    Patients("patients"),
+    PatientDetails("patientDetails"),
+    Prescriptions("prescriptions"),
+    PrescriptionDetails("prescriptionDetails"),
+}
+
+enum class Params(val value: String) {
+    PatientId("patientId"),
+    Id("id"),
+    PrescriptionId("prescriptionId"),
 }
