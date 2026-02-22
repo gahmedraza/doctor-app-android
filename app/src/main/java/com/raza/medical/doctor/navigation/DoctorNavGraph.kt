@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.raza.medical.doctor.login.LoginPage
+import com.raza.medical.doctor.login.OtpPage
 import com.raza.medical.doctor.login.RegisterPage
 import com.raza.medical.doctor.patientdetails.PatientDetailsScreen
 import com.raza.medical.doctor.patientlist.PatientListScreen
@@ -19,13 +20,24 @@ fun DoctorNavGraph() {
 
     NavHost(
         navController,
-        startDestination = "login"
+        startDestination = "verifyOtp"
     ) {
+
+        composable("verifyOtp") {
+            OtpPage(
+                onOtpComplete = { otp ->
+                    navController.navigate("login")
+                }
+            )
+        }
 
         composable("register") {
             RegisterPage(
                 onLogin = {
                     navController.navigate("login")
+                },
+                onRegisterSuccess = {
+                    navController.navigate("verifyOtp")
                 }
             )
         }

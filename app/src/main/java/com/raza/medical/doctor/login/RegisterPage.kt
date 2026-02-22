@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,15 +30,18 @@ import com.raza.medical.doctor.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun RegisterPage(
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onRegisterSuccess: () -> Unit
 ) {
     var username by remember { mutableStateOf<String>("") }
     var email by remember { mutableStateOf<String>("") }
     var password by remember { mutableStateOf<String>("") }
     var confirmPassword by remember { mutableStateOf<String>("") }
+    var scope = rememberCoroutineScope()
 
     Scaffold { padding ->
         Column(
@@ -124,13 +128,20 @@ fun RegisterPage(
                     .fillMaxWidth()
                     .padding(top = 120.dp),
                 onClick = {
-                    CoroutineScope(context = Dispatchers.IO).launch {
+                    CoroutineScope(context = Dispatchers.Main).launch {
                         //
                         val request = RegisterRequest()
                         request.username = username
                         request.email = email
                         request.password = password
-                        makeRegisterCall(request)
+                        val response =
+                            withContext(Dispatchers.IO) {
+                                makeRegisterCall(request)
+                            }
+
+                        if(response != null) {
+                            onRegisterSuccess()
+                        }
                     }
                 }
             ) {
@@ -176,7 +187,8 @@ fun RegisterPage(
 @Preview(showBackground = true)
 @Composable
 fun RegisterPreview() {
-    RegisterPage {
-
-    }
+    RegisterPage(
+        onLogin = {},
+        onRegisterSuccess = {}
+    )
 }
