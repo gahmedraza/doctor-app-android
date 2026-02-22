@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.raza.medical.doctor.login.ForgotPasswordScreen
 import com.raza.medical.doctor.login.LoginPage
 import com.raza.medical.doctor.login.OtpPage
 import com.raza.medical.doctor.login.RegisterPage
@@ -20,8 +21,11 @@ fun DoctorNavGraph() {
 
     NavHost(
         navController,
-        startDestination = "verifyOtp"
+        startDestination = "forgotPassword"
     ) {
+        composable("forgotPassword") {
+            ForgotPasswordScreen()
+        }
 
         composable("verifyOtp") {
             OtpPage(

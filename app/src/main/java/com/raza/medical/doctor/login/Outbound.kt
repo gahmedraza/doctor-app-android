@@ -10,5 +10,13 @@ const val AUTH = "auth"
 const val REGISTER = "register"
 const val LOGIN = "login"
 
+const val FORGOT_PASSWORD = "forgot-password"
+
+const val RESET_PASSWORD = "reset-password"
+
 const val REGISTER_URL = "$BASE_URL/$AUTH/$REGISTER"
 const val LOGIN_URL = "$BASE_URL/$AUTH/$LOGIN"
+
+const val FORGOT_PASSWORD_URL = "$BASE_URL/$AUTH/$FORGOT_PASSWORD"
+
+const val RESET_PASSWORD_URL = "$BASE_URL/$AUTH/$RESET_PASSWORD"

@@ -15,6 +15,53 @@ class AuthViewModel : ViewModel() {
 
 }
 
+class ForgotPasswordRequest: Request {
+    var email: String? = null
+}
+
+class ForgotPasswordResponse {
+    val link: String? = null
+}
+
+class ResetPasswordRequest: Request {
+    var newPassword: String? = null
+}
+
+class ResetPasswordResponse {
+    var result: Boolean? = false
+}
+
+fun callForgotPasswordApi(request: ForgotPasswordRequest):
+        ForgotPasswordResponse? {
+    var response: ForgotPasswordResponse? = null
+
+    val stringResponse = makeNetworkRequest(FORGOT_PASSWORD_URL,
+        request, RequestType.POST)
+
+    Logger.w(stringResponse)
+
+    response = Gson().fromJson(stringResponse,
+        ForgotPasswordResponse::class.java)
+
+    return response
+}
+
+fun callResetPasswordApi(request: ResetPasswordRequest):
+        ResetPasswordResponse? {
+
+    var response: ResetPasswordResponse? = null
+
+    val stringResponse = makeNetworkRequest(
+        RESET_PASSWORD_URL, request, RequestType.POST)
+
+    Logger.w(stringResponse)
+
+    response = Gson().fromJson(stringResponse,
+        ResetPasswordResponse::class.java)
+
+    return response
+}
+
 fun makeLoginCall(request: LoginRequest): LoginResponse? {
     var response: LoginResponse? = null
 
