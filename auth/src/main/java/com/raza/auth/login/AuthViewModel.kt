@@ -163,7 +163,10 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun resetPassword(token: String?) {
+    fun resetPassword(
+        token: String?,
+        onResetSuccess: () -> Unit
+        ) {
         viewModelScope.launch {
             try {
                 isLoading = true
@@ -178,7 +181,7 @@ class AuthViewModel : ViewModel() {
 
                 when(response) {
                     is Result.Success -> {
-
+                        onResetSuccess()
                     }
                     is Result.Failure -> {
                         events.emit(UiEvent.ShowSnackbar(

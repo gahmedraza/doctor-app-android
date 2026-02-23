@@ -25,8 +25,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun ResetPasswordScreen(token: String?,
-                        viewModel: AuthViewModel = viewModel()) {
+fun ResetPasswordScreen(
+    token: String?,
+    onResetSuccess: () -> Unit,
+    viewModel: AuthViewModel = viewModel()
+) {
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -74,7 +77,10 @@ fun ResetPasswordScreen(token: String?,
                     .fillMaxWidth()
                     .padding(top = 50.dp),
                 onClick = {
-                    viewModel.resetPassword(token)
+                    viewModel.resetPassword(token,
+                        onResetSuccess = {
+                            onResetSuccess()
+                        })
                 }) {
                 Text(
                     text =

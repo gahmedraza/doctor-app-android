@@ -1,6 +1,6 @@
 package com.raza.auth.navigation
 
-import android.net.Uri
+import androidx.core.net.toUri
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -23,8 +23,54 @@ fun NavGraphBuilder.authNavGraph(
         startDestination = AuthDestinations.Login.value
     ) {
 
+        composable(AuthDestinations.Login.value) {
+            LoginPage(
+                onLoginSuccess = {
+                    homeAddress?.let { home ->
+                        navController.navigate(home)
+                    }
+
+                },
+                onRegister = {
+                    navController.navigate(AuthDestinations.Register.value)
+                },
+                onForgotPassword = {
+                    navController.navigate(AuthDestinations.ForgotPassword.value)
+                }
+            )
+        }
+
+        composable(AuthDestinations.Register.value) {
+            RegisterPage(
+                onRegisterSuccess = {
+                    navController.navigate(AuthDestinations.VerifyOtp.value)
+                },
+                onLogin = {
+                    navController.navigate(AuthDestinations.Login.value)
+                }
+            )
+        }
+
+        composable(AuthDestinations.VerifyOtp.value) {
+            OtpPage(
+                onOtpComplete = { otp ->
+                    navController.navigate(AuthDestinations.Login.value)
+                }
+            )
+        }
+
+        composable(AuthDestinations.ForgotPassword.value) {
+            ForgotPasswordScreen(
+                onResetPassword = { resetLink ->
+                    navController.navigate(
+                        resetLink.toUri()
+                    )
+                }
+            )
+        }
+
         composable(
-             "${AuthDestinations.ResetPassword.value}?token={token}",
+            "${AuthDestinations.ResetPassword.value}?token={token}",
             arguments = listOf(
                 navArgument(
                     "token"
@@ -38,54 +84,15 @@ fun NavGraphBuilder.authNavGraph(
                     uriPattern = "myapp://${AuthDestinations.ResetPassword.value}?token={token}"
                 }
             )
-            ) { backStackEntry ->
+        ) { backStackEntry ->
 
             val token = backStackEntry.arguments?.getString("token")
-            ResetPasswordScreen(token = token ?: "")
-        }
-
-        composable(AuthDestinations.ForgotPassword.value) {
-            ForgotPasswordScreen(
-                onResetPassword = { resetLink ->
+            ResetPasswordScreen(token = token ?: "",
+                onResetSuccess = {
                     navController.navigate(
-                        //"${Destinations.ResetPassword.value}?token=$token")
-                        Uri.parse(resetLink)
+                        AuthDestinations.Login.value
                     )
-                }
-            )
-        }
-
-        composable(AuthDestinations.VerifyOtp.value) {
-            OtpPage(
-                onOtpComplete = { otp ->
-                    navController.navigate(AuthDestinations.Login.value)
-                }
-            )
-        }
-
-        composable(AuthDestinations.Register.value) {
-            RegisterPage(
-                onLogin = {
-                    navController.navigate(AuthDestinations.Login.value)
-                },
-                onRegisterSuccess = {
-                    navController.navigate(AuthDestinations.VerifyOtp.value)
-                }
-            )
-        }
-
-        composable(AuthDestinations.Login.value) {
-            LoginPage(
-                onLoginSuccess = {
-                    homeAddress?.let { home ->
-                        navController.navigate(home)
-                    }
-
-                },
-                onRegister = {
-                    navController.navigate(AuthDestinations.Register.value)
-                }
-            )
+                })
         }
     }
 }
