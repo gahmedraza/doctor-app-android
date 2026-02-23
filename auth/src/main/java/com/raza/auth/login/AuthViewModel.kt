@@ -1,20 +1,32 @@
 package com.raza.auth.login
 
+import android.content.Intent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
+import com.raza.auth.bean.ForgotPasswordRequest
+import com.raza.auth.bean.GoogleSignInRequest
 import com.raza.auth.bean.LoginRequest
 import com.raza.auth.bean.LoginResponse
 import com.raza.auth.bean.RegisterRequest
+import com.raza.auth.bean.ResetPasswordRequest
+import com.raza.auth.bean.Result
 import com.raza.auth.logger.Logger
+import com.raza.auth.networking.callForgotPasswordApi
+import com.raza.auth.networking.callResetPasswordApi
+import com.raza.auth.networking.makeGoogleSignInCall
 import com.raza.auth.networking.makeLoginCall
 import com.raza.auth.networking.makeRegisterCall
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.printStackTrace
 
 const val DEBUG_TAG = "Networking"
 
@@ -64,9 +76,13 @@ class AuthViewModel : ViewModel() {
                         makeLoginCall(request)
                     }
 
-                    response?.let {
-                        events.emit(UiEvent.ShowSnackbar("response: $response"))
-                        onLoginSuccess(response)
+                    when(response) {
+                        is Result.Success -> {
+                            onLoginSuccess(response.data!!)
+                        }
+                        is Result.Failure -> {
+                            events.emit(UiEvent.ShowSnackbar(response.error!!))
+                        }
                     }
                 }
 
@@ -95,15 +111,126 @@ class AuthViewModel : ViewModel() {
                         makeRegisterCall(request)
                     }
 
-                response?.let {
-                    events.emit(UiEvent.ShowSnackbar("response: $response"))
-                    onRegisterSuccess()
+                when(response) {
+                    is Result.Success -> {
+                        onRegisterSuccess()
+                    }
+                    is Result.Failure -> {
+                        events.emit(UiEvent.ShowSnackbar(
+                            response.error!!
+                        ))
+                    }
                 }
 
             } catch (e: Exception) {
                 Logger.w("${e.printStackTrace()}")
                 events.emit(UiEvent.ShowSnackbar("${e.message}"))
 
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun forgotPassword(onResetPassword: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                isLoading = true
+
+                val request = ForgotPasswordRequest()
+                request.email = email
+                val response = withContext(Dispatchers.IO) {
+                    callForgotPasswordApi(request)
+                }
+
+                when(response) {
+                    is Result.Success -> {
+                        onResetPassword(response.data?.resetLink!!)
+                    }
+                    is Result.Failure -> {
+                        events.emit(UiEvent.ShowSnackbar(
+                            response.error!!
+                        ))
+                    }
+                }
+            } catch (e: Exception) {
+                Logger.w("${e.printStackTrace()}")
+                events.emit(UiEvent.ShowSnackbar("${e.message}"))
+
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun resetPassword(token: String?) {
+        viewModelScope.launch {
+            try {
+                isLoading = true
+
+                val request = ResetPasswordRequest()
+                request.newPassword = password
+                request.token = token
+
+                val response = withContext(Dispatchers.IO) {
+                    callResetPasswordApi(request)
+                }
+
+                when(response) {
+                    is Result.Success -> {
+
+                    }
+                    is Result.Failure -> {
+                        events.emit(UiEvent.ShowSnackbar(
+                            response.error!!
+                        ))
+                    }
+                }
+
+            } catch (e: Exception) {
+                Logger.w("${e.printStackTrace()}")
+                events.emit(UiEvent.ShowSnackbar("${e.message}"))
+
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun loginWithGoogle(data: Intent?,
+                        onLogin: () -> Unit) {
+        viewModelScope.launch {
+            try {
+
+                isLoading = true
+
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data!!)
+
+                val account = task.getResult(
+                    ApiException::class.java
+                )
+                account.idToken?.let {
+                    val request = GoogleSignInRequest()
+                    request.idToken = it
+
+                    val response = withContext(Dispatchers.IO) {
+                        makeGoogleSignInCall(request)
+                    }
+
+                    when(response) {
+                        is Result.Success -> {
+                            onLogin()
+                        }
+                        is Result.Failure -> {
+                            events.emit(UiEvent.ShowSnackbar(
+                                response.error!!
+                            ))
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Logger.w("${e.printStackTrace()}")
+                events.emit(UiEvent.ShowSnackbar("${e.message}"))
             } finally {
                 isLoading = false
             }

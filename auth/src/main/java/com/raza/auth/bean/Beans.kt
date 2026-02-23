@@ -63,3 +63,8 @@ class GoogleSignInResponse {
     var accessToken: String? = null
     var refreshToken: String? = null
 }
+
+sealed class Result<out T> {
+    data class Failure(val error: String?): Result<Nothing>()
+    data class Success<out T>(val data: T?): Result<T>()
+}

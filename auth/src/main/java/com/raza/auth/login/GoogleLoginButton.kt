@@ -9,17 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.ApiException
-import com.raza.auth.bean.GoogleSignInRequest
-import com.raza.auth.networking.makeGoogleSignInCall
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun GoogleLoginButton(
-
+    viewModel: AuthViewModel= viewModel(),
+    onLogin: () -> Unit
 ) {
     val context = LocalContext.current
     val googleManager = remember {
@@ -30,22 +25,11 @@ fun GoogleLoginButton(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
 
-        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-        try {
-            val account = task.getResult(
-                ApiException::class.java
-            )
-            account.idToken?.let {
-                val request = GoogleSignInRequest()
-                request.idToken = it
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    makeGoogleSignInCall(request)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        viewModel.loginWithGoogle(
+            result.data,
+            onLogin = {
+                onLogin()
+            })
     }
 
     Button(

@@ -167,7 +167,11 @@ fun LoginPage(
                 }
             }
 
-            GoogleLoginButton()
+            GoogleLoginButton(
+                onLogin = {
+                    onLoginSuccess()
+                }
+            )
 
             HorizontalDivider(
                 modifier = Modifier

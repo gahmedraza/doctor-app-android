@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.auth.bean.ForgotPasswordRequest
 import com.raza.auth.networking.callForgotPasswordApi
 import kotlinx.coroutines.CoroutineScope
@@ -26,9 +27,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun ForgotPasswordScreen(onResetPassword: (String) -> Unit) {
-    var email by remember { mutableStateOf("") }
-
+fun ForgotPasswordScreen(onResetPassword: (String) -> Unit,
+                         viewModel: AuthViewModel = viewModel()) {
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -49,9 +49,9 @@ fun ForgotPasswordScreen(onResetPassword: (String) -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 100.dp),
-                value = email,
+                value = viewModel.email,
                 onValueChange = {
-                    email = it
+                    viewModel.email = it
                 }
             )
 
@@ -60,16 +60,7 @@ fun ForgotPasswordScreen(onResetPassword: (String) -> Unit) {
                     .fillMaxWidth()
                     .padding(top = 50.dp),
                 onClick = {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val request = ForgotPasswordRequest()
-                        request.email = email
-                        val response = callForgotPasswordApi(request)
-                        response?.let{
-                            withContext(Dispatchers.Main) {
-                                onResetPassword(response.resetLink!!)
-                            }
-                        }
-                    }
+                    viewModel.forgotPassword(onResetPassword)
                 }
             ) {
                 Text(

@@ -17,78 +17,40 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 fun callForgotPasswordApi(request: ForgotPasswordRequest):
-        ForgotPasswordResponse? {
-    var response: ForgotPasswordResponse? = null
+        Result<ForgotPasswordResponse> {
 
-    val stringResponse = makeNetworkRequest(FORGOT_PASSWORD_URL,
-        request, RequestType.POST)
-
-    Logger.w(stringResponse)
-
-    response = Gson().fromJson(stringResponse,
-        ForgotPasswordResponse::class.java)
-
-    return response
+    return makeNetworkRequest(FORGOT_PASSWORD_URL, request,
+        RequestType.POST, ForgotPasswordResponse::class.java)
 }
 
 fun callResetPasswordApi(request: ResetPasswordRequest):
-        ResetPasswordResponse? {
+        Result<ResetPasswordResponse> {
 
-    var response: ResetPasswordResponse? = null
-
-    val stringResponse = makeNetworkRequest(
-        RESET_PASSWORD_URL, request, RequestType.POST)
-
-    Logger.w(stringResponse)
-
-    response = Gson().fromJson(stringResponse,
-        ResetPasswordResponse::class.java)
-
-    return response
+    return makeNetworkRequest(
+        RESET_PASSWORD_URL, request,
+        RequestType.POST, ResetPasswordResponse::class.java)
 }
 
-fun makeLoginCall(request: LoginRequest): LoginResponse? {
-    var response: LoginResponse? = null
-
-    val stringResponse = makeNetworkRequest(LOGIN_URL, request, RequestType.POST)
-
-    Logger.w(stringResponse, DEBUG_TAG)
-
-    response = Gson().fromJson(stringResponse,
-        LoginResponse::class.java)
-
-    return response
+fun makeLoginCall(request: LoginRequest): Result<LoginResponse> {
+    return makeNetworkRequest(LOGIN_URL, request,
+        RequestType.POST, LoginResponse::class.java)
 }
 
-fun makeRegisterCall(request: RegisterRequest): RegisterResponse? {
-    var response: RegisterResponse? = null
-
-    val stringResponse = makeNetworkRequest(REGISTER_URL, request, RequestType.POST)
-
-    Logger.w(stringResponse, DEBUG_TAG)
-
-    response = Gson().fromJson(stringResponse,
-        RegisterResponse::class.java)
-
-    return response
+fun makeRegisterCall(request: RegisterRequest): Result<RegisterResponse> {
+    return makeNetworkRequest(REGISTER_URL, request,
+        RequestType.POST, RegisterResponse::class.java)
 }
 
-fun makeGoogleSignInCall(request: GoogleSignInRequest): GoogleSignInResponse {
-    var response: GoogleSignInResponse? = null
-
-    val stringResponse = makeNetworkRequest(GOOGLE_AUTH_URL,
-        request,
-        RequestType.POST)
-
-    Logger.w(stringResponse, DEBUG_TAG)
-
-    response = Gson().fromJson(stringResponse,
-        GoogleSignInResponse::class.java)
-
-    return response
+fun makeGoogleSignInCall(request: GoogleSignInRequest):
+        Result<GoogleSignInResponse> {
+    return makeNetworkRequest(GOOGLE_AUTH_URL, request,
+        RequestType.POST, GoogleSignInResponse::class.java)
 }
 
-fun makeNetworkRequest(url: String, request: Request, requestType: RequestType): String? {
+fun <T> makeNetworkRequest(url: String,
+                           request: Request,
+                           requestType: RequestType,
+                           responseType: Class<T>): Result<T> {
     val url = URL(url)
     val connection = url.openConnection() as HttpURLConnection
 
@@ -115,16 +77,20 @@ fun makeNetworkRequest(url: String, request: Request, requestType: RequestType):
         val error = readNetworkStream(connection.errorStream)
 
         Logger.w(error)
-        return error // Return error and success type based
+
+        return Result.Failure(error) // Return error and success type based
         //convert to response model using type param
     }
 
     val response = readNetworkStream(connection.getInputStream())
 
+    Logger.w(response, DEBUG_TAG)
+
+    val result: T = Gson().fromJson(response, responseType)
 
     connection.disconnect()
 
-    return response
+    return Result.Success(result)
 }
 
 fun readNetworkStream(stream: InputStream): String {

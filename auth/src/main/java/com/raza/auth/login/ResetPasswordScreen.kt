@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.auth.bean.ResetPasswordRequest
 import com.raza.auth.networking.callResetPasswordApi
 import kotlinx.coroutines.CoroutineScope
@@ -24,10 +25,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun ResetPasswordScreen(token: String?) {
-    var newPassword by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-
+fun ResetPasswordScreen(token: String?,
+                        viewModel: AuthViewModel = viewModel()) {
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -54,9 +53,9 @@ fun ResetPasswordScreen(token: String?) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 100.dp),
-                value = newPassword,
+                value = viewModel.password,
                 onValueChange = {
-                    newPassword = it
+                    viewModel.password = it
                 }
             )
 
@@ -64,9 +63,9 @@ fun ResetPasswordScreen(token: String?) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp),
-                value = confirmPassword,
+                value = viewModel.password,
                 onValueChange = {
-                    confirmPassword = it
+                    viewModel.password = it
                 }
             )
 
@@ -75,12 +74,7 @@ fun ResetPasswordScreen(token: String?) {
                     .fillMaxWidth()
                     .padding(top = 50.dp),
                 onClick = {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val request = ResetPasswordRequest()
-                        request.newPassword = newPassword
-                        request.token = token
-                        callResetPasswordApi(request)
-                    }
+                    viewModel.resetPassword(token)
                 }) {
                 Text(
                     text =
