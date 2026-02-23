@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.auth.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,15 +34,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginPage(
-    onRegister: () -> Unit
+    onRegister: () -> Unit,
+    viewModel: AuthViewModel = viewModel()
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var showUsernameError by remember { mutableStateOf(false) }
-    var usernameErrorMessage by remember { mutableStateOf("") }
-    var showPasswordError by remember { mutableStateOf(false) }
-    var passwordErrorMessage by remember { mutableStateOf("") }
-
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -55,17 +50,7 @@ fun LoginPage(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            Image(
-                painter = painterResource(
-                    id =
-                        R.drawable.baseline_medical_services_24
-                ),
-                contentDescription = "login icon",
-                modifier = Modifier
-                    .padding(30.dp)
-                    .size(120.dp),
-                colorFilter = ColorFilter.tint(Color(0xFF000000))
-            )
+            MedicalImage(20.dp)
 
             Text(
                 modifier = Modifier
@@ -86,14 +71,14 @@ fun LoginPage(
                     .fillMaxWidth()
                     .padding(top = 50.dp),
                 label = { Text("username") },
-                isError = showUsernameError,
-                value = username,
+                isError = viewModel.showUsernameError,
+                value = viewModel.username,
                 onValueChange = {
-                    username = it
+                    viewModel.username = it
                 }
             )
 
-            if (showUsernameError) {
+            if (viewModel.showUsernameError) {
                 Text(
                     modifier = Modifier
                         .padding(
@@ -101,7 +86,7 @@ fun LoginPage(
                             bottom = 10.dp
                         ),
 
-                    text = usernameErrorMessage
+                    text = viewModel.usernameErrorMessage
                 )
             }
 
@@ -113,14 +98,14 @@ fun LoginPage(
                     )
                     .fillMaxWidth(),
                 label = { Text("password") },
-                value = password,
-                isError = showPasswordError,
+                value = viewModel.password,
+                isError = viewModel.showPasswordError,
                 onValueChange = {
-                    password = it
+                    viewModel.password = it
                 }
             )
 
-            if (showPasswordError) {
+            if (viewModel.showPasswordError) {
                 Text(
                     modifier = Modifier
                         .padding(
@@ -128,7 +113,7 @@ fun LoginPage(
                             bottom = 10.dp
                         ),
 
-                    text = passwordErrorMessage
+                    text = viewModel.passwordErrorMessage
                 )
             }
 
@@ -138,23 +123,7 @@ fun LoginPage(
                     .padding(top = 200.dp),
 
                 onClick = {
-
-                    var validation = validateUsername(username)
-                    showUsernameError = validation.showError
-                    usernameErrorMessage = validation.errorMessage
-
-                    validation = validatePassword(password)
-                    showPasswordError = validation.showError
-                    passwordErrorMessage = validation.errorMessage
-
-                    if (!showUsernameError && !showPasswordError) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val request = LoginRequest()
-                            request.email = username
-                            request.password = password
-                            makeLoginCall(request)
-                        }
-                    }
+                    viewModel.login()
                 }) {
 
                 Text(
@@ -203,7 +172,5 @@ fun LoginPage(
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    LoginPage {
-
-    }
+    LoginPage(onRegister = {})
 }

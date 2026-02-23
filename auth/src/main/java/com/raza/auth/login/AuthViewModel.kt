@@ -1,9 +1,15 @@
 package com.raza.auth.login
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.gson.Gson
 import com.raza.auth.logger.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -13,7 +19,58 @@ import java.net.URL
 const val DEBUG_TAG = "Networking"
 
 class AuthViewModel : ViewModel() {
+    var username by mutableStateOf("")
 
+    var password by mutableStateOf("")
+
+    var showUsernameError by mutableStateOf(false)
+
+    var usernameErrorMessage by mutableStateOf("")
+
+    var showPasswordError by mutableStateOf(false)
+
+    var passwordErrorMessage by mutableStateOf("")
+
+    var email by mutableStateOf("")
+
+    var confirmPassword by mutableStateOf("")
+
+    fun login() {
+        var validation = validateUsername(username)
+        showUsernameError = validation.showError
+        usernameErrorMessage = validation.errorMessage
+
+        validation = validatePassword(password)
+        showPasswordError = validation.showError
+        passwordErrorMessage = validation.errorMessage
+
+        if (!showUsernameError && !showPasswordError) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val request = LoginRequest()
+                request.email = username
+                request.password = password
+                makeLoginCall(request)
+            }
+        }
+    }
+
+    fun register(onRegisterSuccess: () -> Unit) {
+        CoroutineScope(context = Dispatchers.Main).launch {
+            //
+            val request = RegisterRequest()
+            request.username = username
+            request.email = email
+            request.password = password
+            val response =
+                withContext(Dispatchers.IO) {
+                    makeRegisterCall(request)
+                }
+
+            if(response != null) {
+                onRegisterSuccess()
+            }
+        }
+    }
 }
 
 class ForgotPasswordRequest: Request {

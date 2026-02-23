@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.auth.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,14 +36,9 @@ import kotlinx.coroutines.withContext
 @Composable
 fun RegisterPage(
     onLogin: () -> Unit,
-    onRegisterSuccess: () -> Unit
+    onRegisterSuccess: () -> Unit,
+    viewModel: AuthViewModel = viewModel()
 ) {
-    var username by remember { mutableStateOf<String>("") }
-    var email by remember { mutableStateOf<String>("") }
-    var password by remember { mutableStateOf<String>("") }
-    var confirmPassword by remember { mutableStateOf<String>("") }
-    var scope = rememberCoroutineScope()
-
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -55,14 +51,7 @@ fun RegisterPage(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Image(
-                painter = painterResource(R.drawable.baseline_medical_services_24),
-                contentDescription = "Medical Icon",
-                modifier = Modifier
-                    .padding(top = 30.dp)
-                    .size(120.dp),
-                colorFilter = ColorFilter.tint(Color(0xFF000000))
-            )
+            MedicalImage(20.dp)
 
             Text(
                 modifier = Modifier
@@ -78,9 +67,9 @@ fun RegisterPage(
                 label = {
                     Text("Username")
                 },
-                value = username,
+                value = viewModel.username,
                 onValueChange = {
-                    username = it
+                    viewModel.username = it
                 }
             )
             //
@@ -91,9 +80,9 @@ fun RegisterPage(
                 label = {
                     Text("Email")
                 },
-                value = email,
+                value = viewModel.email,
                 onValueChange = {
-                    email = it
+                    viewModel.email = it
                 }
             )
             //
@@ -104,9 +93,9 @@ fun RegisterPage(
                 label = {
                     Text("Password")
                 },
-                value = password,
+                value = viewModel.password,
                 onValueChange = {
-                    password = it
+                    viewModel.password = it
                 }
             )
             //
@@ -117,9 +106,9 @@ fun RegisterPage(
                 label = {
                     Text("Confirm Password")
                 },
-                value = confirmPassword,
+                value = viewModel.confirmPassword,
                 onValueChange = {
-                    confirmPassword = it
+                    viewModel.confirmPassword = it
                 }
             )
 
@@ -128,21 +117,7 @@ fun RegisterPage(
                     .fillMaxWidth()
                     .padding(top = 120.dp),
                 onClick = {
-                    CoroutineScope(context = Dispatchers.Main).launch {
-                        //
-                        val request = RegisterRequest()
-                        request.username = username
-                        request.email = email
-                        request.password = password
-                        val response =
-                            withContext(Dispatchers.IO) {
-                                makeRegisterCall(request)
-                            }
-
-                        if(response != null) {
-                            onRegisterSuccess()
-                        }
-                    }
+                    viewModel.register(onRegisterSuccess)
                 }
             ) {
                 Text(
