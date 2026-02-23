@@ -10,6 +10,8 @@ const val AUTH = "auth"
 const val REGISTER = "register"
 const val LOGIN = "login"
 
+const val GOOGLE = "google"
+
 const val FORGOT_PASSWORD = "forgot-password"
 
 const val RESET_PASSWORD = "reset-password"
@@ -20,3 +22,5 @@ const val LOGIN_URL = "$BASE_URL/$AUTH/$LOGIN"
 const val FORGOT_PASSWORD_URL = "$BASE_URL/$AUTH/$FORGOT_PASSWORD"
 
 const val RESET_PASSWORD_URL = "$BASE_URL/$AUTH/$RESET_PASSWORD"
+
+const val GOOGLE_AUTH_URL = "$BASE_URL/$AUTH/$GOOGLE"

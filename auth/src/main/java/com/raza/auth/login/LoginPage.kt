@@ -162,6 +162,8 @@ fun LoginPage(
                 )
             }
 
+            GoogleLoginButton()
+
             HorizontalDivider(
                 modifier = Modifier
                     .padding(

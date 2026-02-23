@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -53,6 +54,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     //
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     //Unit Test
     testImplementation(libs.junit)

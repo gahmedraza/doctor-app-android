@@ -1,6 +1,7 @@
 package com.raza.auth.login
 
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.gson.Gson
 import com.raza.auth.logger.Logger
 import java.io.BufferedReader
@@ -86,6 +87,21 @@ fun makeRegisterCall(request: RegisterRequest): RegisterResponse? {
 
     response = Gson().fromJson(stringResponse,
         RegisterResponse::class.java)
+
+    return response
+}
+
+fun makeGoogleSignInCall(request: GoogleSignInRequest): GoogleSignInResponse {
+    var response: GoogleSignInResponse? = null
+
+    val stringResponse = makeNetworkRequest(GOOGLE_AUTH_URL,
+        request,
+        RequestType.POST)
+
+    Logger.w(stringResponse, DEBUG_TAG)
+
+    response = Gson().fromJson(stringResponse,
+        GoogleSignInResponse::class.java)
 
     return response
 }

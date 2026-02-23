@@ -18,7 +18,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
 
     navigation(
         route = "auth",
-        startDestination = AuthDestinations.ForgotPassword.value
+        startDestination = AuthDestinations.Login.value
     ) {
 
         composable(
