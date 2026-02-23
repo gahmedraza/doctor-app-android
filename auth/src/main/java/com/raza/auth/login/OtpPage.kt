@@ -1,4 +1,4 @@
-package com.raza.medical.doctor.login
+package com.raza.auth.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

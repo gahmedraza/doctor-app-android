@@ -1,8 +1,8 @@
-package com.raza.medical.doctor.login
+package com.raza.auth.login
 
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import com.raza.medical.doctor.logger.Logger
+import com.raza.auth.logger.Logger
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -20,15 +20,17 @@ class ForgotPasswordRequest: Request {
 }
 
 class ForgotPasswordResponse {
-    val link: String? = null
+    val resetLink: String? = null
 }
 
 class ResetPasswordRequest: Request {
     var newPassword: String? = null
+    var token: String? = null
 }
 
 class ResetPasswordResponse {
     var result: Boolean? = false
+    var message: String? = null
 }
 
 fun callForgotPasswordApi(request: ForgotPasswordRequest):

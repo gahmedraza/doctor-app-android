@@ -1,4 +1,4 @@
-package com.raza.medical.doctor.login
+package com.raza.auth.login
 
 class Validator {
     var showError: Boolean = false

@@ -1,4 +1,4 @@
-package com.raza.medical.doctor.login
+package com.raza.auth.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,32 +22,49 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun ForgotPasswordScreen() {
-    var email by remember { mutableStateOf("") }
+fun ResetPasswordScreen(token: String?) {
+    var newPassword by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
     Scaffold { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(start = 10.dp, end = 10.dp),
+                .padding(
+                    start = 10.dp,
+                    end = 10.dp
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top =
-                    100.dp),
-                text = "Enter your email to reset your password",
-                fontSize = 25.sp)
+                    .padding(
+                        top = 200.dp
+                    ),
+                text =
+                    "Create a new Password",
+                fontSize = 25.sp
+            )
 
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 100.dp),
-                value = email,
+                value = newPassword,
                 onValueChange = {
-                    email = it
+                    newPassword = it
+                }
+            )
+
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                value = confirmPassword,
+                onValueChange = {
+                    confirmPassword = it
                 }
             )
 
@@ -58,18 +74,17 @@ fun ForgotPasswordScreen() {
                     .padding(top = 50.dp),
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
-                        val request = ForgotPasswordRequest()
-                        request.email = email
-                        callForgotPasswordApi(request)
+                        val request = ResetPasswordRequest()
+                        request.newPassword = newPassword
+                        request.token = token
+                        callResetPasswordApi(request)
                     }
-                }
-            ) {
+                }) {
                 Text(
                     text =
-                        "Reset Password"
+                        "Submit"
                 )
             }
-
         }
     }
 }

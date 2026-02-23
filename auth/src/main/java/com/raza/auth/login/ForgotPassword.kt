@@ -1,4 +1,4 @@
-package com.raza.medical.doctor.login
+package com.raza.auth.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,51 +21,35 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
-fun ResetPasswordScreen() {
-    var newPassword by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+fun ForgotPasswordScreen(onResetPassword: (String) -> Unit) {
+    var email by remember { mutableStateOf("") }
 
     Scaffold { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(
-                    start = 10.dp,
-                    end = 10.dp
-                ),
+                .padding(start = 10.dp, end = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        top = 200.dp
-                    ),
-                text =
-                    "Create a new Password",
-                fontSize = 25.sp
-            )
+                    .padding(top =
+                    100.dp),
+                text = "Enter your email to reset your password",
+                fontSize = 25.sp)
 
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 100.dp),
-                value = newPassword,
+                value = email,
                 onValueChange = {
-                    newPassword = it
-                }
-            )
-
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp),
-                value = confirmPassword,
-                onValueChange = {
-                    confirmPassword = it
+                    email = it
                 }
             )
 
@@ -74,16 +59,23 @@ fun ResetPasswordScreen() {
                     .padding(top = 50.dp),
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
-                        val request = ResetPasswordRequest()
-                        request.newPassword = newPassword
-                        callResetPasswordApi(request)
+                        val request = ForgotPasswordRequest()
+                        request.email = email
+                        val response = callForgotPasswordApi(request)
+                        response?.let{
+                            withContext(Dispatchers.Main) {
+                                onResetPassword(response.resetLink!!)
+                            }
+                        }
                     }
-                }) {
+                }
+            ) {
                 Text(
                     text =
-                        "Submit"
+                        "Reset Password"
                 )
             }
+
         }
     }
 }

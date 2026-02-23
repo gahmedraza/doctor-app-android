@@ -1,4 +1,4 @@
-package com.raza.medical.doctor.login
+package com.raza.auth.login
 
 const val API_KEY = "reqres_1377da5d7b4e4620b44f573493bca1a9"
 
