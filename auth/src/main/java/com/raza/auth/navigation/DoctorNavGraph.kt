@@ -14,7 +14,9 @@ import com.raza.auth.login.OtpPage
 import com.raza.auth.login.RegisterPage
 import com.raza.auth.login.ResetPasswordScreen
 
-fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.authNavGraph(
+    navController: NavHostController,
+    homeAddress: String?) {
 
     navigation(
         route = "auth",
@@ -74,6 +76,12 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
 
         composable(AuthDestinations.Login.value) {
             LoginPage(
+                onLoginSuccess = {
+                    homeAddress?.let { home ->
+                        navController.navigate(home)
+                    }
+
+                },
                 onRegister = {
                     navController.navigate(AuthDestinations.Register.value)
                 }

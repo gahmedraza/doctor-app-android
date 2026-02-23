@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -116,14 +117,23 @@ fun RegisterPage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 120.dp),
+
+                enabled = !viewModel.isLoading,
+
                 onClick = {
                     viewModel.register(onRegisterSuccess)
                 }
             ) {
-                Text(
-                    text =
-                        "Register"
-                )
+                if(viewModel.isLoading) {
+                    CircularProgressIndicator(modifier = Modifier
+                        .size(18.dp))
+
+                } else {
+                    Text(
+                        text =
+                            "Register"
+                    )
+                }
             }
 
             HorizontalDivider(

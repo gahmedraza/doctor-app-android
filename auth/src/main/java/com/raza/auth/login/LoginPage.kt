@@ -9,11 +9,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,9 +40,27 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginPage(
     onRegister: () -> Unit,
+    onLoginSuccess: () -> Unit,
     viewModel: AuthViewModel = viewModel()
 ) {
-    Scaffold { padding ->
+
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when(event) {
+                is AuthViewModel.UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
+            }
+        }
+    }
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -122,13 +145,26 @@ fun LoginPage(
                     .fillMaxWidth()
                     .padding(top = 200.dp),
 
+                enabled = !viewModel.isLoading,
+
                 onClick = {
-                    viewModel.login()
+                    viewModel.login(onLoginSuccess = {
+                        onLoginSuccess()
+                    })
                 }) {
 
-                Text(
-                    text = "Login"
-                )
+                if(viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(18.dp),
+                        strokeWidth = 2.dp
+                    )
+                } else {
+
+                    Text(
+                        text = "Login"
+                    )
+                }
             }
 
             GoogleLoginButton()
@@ -172,5 +208,8 @@ fun LoginPage(
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    LoginPage(onRegister = {})
+    LoginPage(
+        onLoginSuccess = {},
+        onRegister = {}
+    )
 }

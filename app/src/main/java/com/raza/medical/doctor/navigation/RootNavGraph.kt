@@ -14,7 +14,7 @@ fun RootNavGraph() {
         startDestination = "auth"
     ) {
 
-        authNavGraph(navController)
+        authNavGraph(navController, home)
         doctorNavGraph(navController)
     }
 }
