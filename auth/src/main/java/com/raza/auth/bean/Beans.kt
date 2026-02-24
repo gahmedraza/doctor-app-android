@@ -68,3 +68,13 @@ sealed class Result<out T> {
     data class Failure(val error: String?): Result<Nothing>()
     data class Success<out T>(val data: T?): Result<T>()
 }
+
+class FacebookLoginRequest: Request {
+    var accessToken: String? = null
+}
+
+class FacebookLoginResponse{
+    var token: String? = null
+
+    var id: String? = null
+}

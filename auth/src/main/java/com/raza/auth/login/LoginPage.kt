@@ -178,6 +178,15 @@ fun LoginPage(
                 }
             )
 
+            FacebookLoginButton(
+                onTokenReceived = { token ->
+                    viewModel.loginWithFacebook(token,
+                        onFacebookLoginSuccess = {
+                            onLoginSuccess()
+                        })
+                }
+            )
+
             HorizontalDivider(
                 modifier = Modifier
                     .padding(
@@ -213,7 +222,7 @@ fun LoginPage(
 }
 
 @Preview(showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES)
+    uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun LoginPreview() {
     AuthTheme {

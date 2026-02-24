@@ -8,11 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
+import com.raza.auth.bean.FacebookLoginRequest
+import com.raza.auth.bean.FacebookLoginResponse
 import com.raza.auth.bean.ForgotPasswordRequest
 import com.raza.auth.bean.GoogleSignInRequest
 import com.raza.auth.bean.LoginRequest
 import com.raza.auth.bean.LoginResponse
 import com.raza.auth.bean.RegisterRequest
+import com.raza.auth.bean.RequestType
 import com.raza.auth.bean.ResetPasswordRequest
 import com.raza.auth.bean.Result
 import com.raza.logger.Logger
@@ -20,6 +23,7 @@ import com.raza.auth.networking.callForgotPasswordApi
 import com.raza.auth.networking.callResetPasswordApi
 import com.raza.auth.networking.makeGoogleSignInCall
 import com.raza.auth.networking.makeLoginCall
+import com.raza.auth.networking.makeNetworkRequest
 import com.raza.auth.networking.makeRegisterCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -236,5 +240,43 @@ class AuthViewModel : ViewModel() {
                 isLoading = false
             }
         }
+    }
+
+    fun loginWithFacebook(token: String?, onFacebookLoginSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                isLoading = true
+
+                val request = FacebookLoginRequest()
+                request.accessToken = token
+
+                val response = withContext(Dispatchers.IO) {
+                    makeFacebookLoginCall(request)
+                }
+
+                when(response) {
+                  is Result.Success -> {
+                      onFacebookLoginSuccess()
+                  }
+                  is Result.Failure -> {
+
+                  }
+                }
+
+            } catch (e: Exception) {
+                Logger.w("${e.printStackTrace()}")
+                events.emit(UiEvent.ShowSnackbar("${e.message}"))
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun makeFacebookLoginCall(request: FacebookLoginRequest): Result<FacebookLoginResponse> {
+        return makeNetworkRequest(FACEBOOK_AUTH_URL,
+            request,
+            RequestType.POST,
+            FacebookLoginResponse::class.java
+            )
     }
 }
