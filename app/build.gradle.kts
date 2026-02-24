@@ -40,6 +40,7 @@ android {
 dependencies {
     implementation(project(":medical-common-lib"))
     implementation(project(":auth"))
+    implementation(project(":logger"))
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)

@@ -2,7 +2,7 @@ package com.raza.auth.networking
 
 import com.google.gson.Gson
 import com.raza.auth.bean.*
-import com.raza.auth.logger.Logger
+import com.raza.logger.Logger
 import com.raza.auth.login.API_KEY
 import com.raza.auth.login.DEBUG_TAG
 import com.raza.auth.login.FORGOT_PASSWORD_URL

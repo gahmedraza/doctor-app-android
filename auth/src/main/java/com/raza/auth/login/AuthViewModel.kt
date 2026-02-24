@@ -15,18 +15,16 @@ import com.raza.auth.bean.LoginResponse
 import com.raza.auth.bean.RegisterRequest
 import com.raza.auth.bean.ResetPasswordRequest
 import com.raza.auth.bean.Result
-import com.raza.auth.logger.Logger
+import com.raza.logger.Logger
 import com.raza.auth.networking.callForgotPasswordApi
 import com.raza.auth.networking.callResetPasswordApi
 import com.raza.auth.networking.makeGoogleSignInCall
 import com.raza.auth.networking.makeLoginCall
 import com.raza.auth.networking.makeRegisterCall
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.printStackTrace
 
 const val DEBUG_TAG = "Networking"
 

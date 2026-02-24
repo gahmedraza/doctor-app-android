@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.raza.medical.logger"
+    namespace = "com.raza.logger"
     compileSdk {
         version = release(36)
     }

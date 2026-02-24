@@ -1,4 +1,4 @@
-package com.raza.auth.logger
+package com.raza.logger
 
 import android.util.Log
 

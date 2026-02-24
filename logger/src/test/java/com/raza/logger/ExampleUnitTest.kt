@@ -1,4 +1,4 @@
-package com.raza.medical.logger
+package com.raza.logger
 
 import org.junit.Test
 
