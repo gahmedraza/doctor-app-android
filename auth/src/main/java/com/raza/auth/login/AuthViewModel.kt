@@ -272,6 +272,19 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    fun loginWithGithub(token: String?,
+                        onGithubSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                isLoading = true
+
+            } finally {
+
+                isLoading = false
+            }
+        }
+    }
+
     fun makeFacebookLoginCall(request: FacebookLoginRequest): Result<FacebookLoginResponse> {
         return makeNetworkRequest(FACEBOOK_AUTH_URL,
             request,

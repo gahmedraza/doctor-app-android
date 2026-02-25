@@ -9,6 +9,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.raza.auth.login.ForgotPasswordScreen
+import com.raza.auth.login.GithubCallbackScreen
 import com.raza.auth.login.LoginPage
 import com.raza.auth.login.OtpPage
 import com.raza.auth.login.RegisterPage
@@ -22,6 +23,27 @@ fun NavGraphBuilder.authNavGraph(
         route = "auth",
         startDestination = AuthDestinations.Login.value
     ) {
+
+        composable(
+            route = "github_callback?code={code",
+            arguments = listOf(
+                navArgument("code") {
+                    type = NavType.StringType
+                }),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "yourapp://oauth?code={code}"
+                })
+        ) { backStackEntry ->
+            val code = backStackEntry.arguments?.getString("code")
+            GithubCallbackScreen(
+                code,
+                onGithubSuccess = {
+                    homeAddress?.let { home ->
+                        navController.navigate(home)
+                    }
+                })
+        }
 
         composable(AuthDestinations.Login.value) {
             LoginPage(
