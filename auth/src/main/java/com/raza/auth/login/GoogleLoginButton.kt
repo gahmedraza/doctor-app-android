@@ -2,7 +2,6 @@ package com.raza.auth.login
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,7 +14,8 @@ import com.raza.auth.theme.AuthTheme
 
 @Composable
 fun GoogleLoginButton(
-    viewModel: AuthViewModel= viewModel(),
+    modifier: Modifier = Modifier,
+    viewModel: AuthViewModel = viewModel(),
     onLogin: () -> Unit
 ) {
     val context = LocalContext.current
@@ -35,7 +35,7 @@ fun GoogleLoginButton(
     }
 
     Button(
-        //modifier = Modifier.fillMaxWidth(0.5f),
+        modifier = modifier,
         onClick = {
             launcher.launch(googleManager.client.signInIntent)
         }
@@ -48,6 +48,6 @@ fun GoogleLoginButton(
 @Composable
 fun PreviewGoogleButton() {
     AuthTheme {
-        GoogleLoginButton { }
+        GoogleLoginButton(onLogin = { },)
     }
 }

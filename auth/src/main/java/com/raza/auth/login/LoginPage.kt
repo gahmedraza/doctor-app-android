@@ -25,6 +25,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -125,12 +127,13 @@ fun LoginPage(
 
             Text(
                 modifier = Modifier
-                    .padding(top = 20.dp)
+                    .padding(top = 20.dp,
+                        end = 10.dp)
                     .align(Alignment.End)
                     .clickable {
                         onForgotPassword()
                     },
-                text = "Forgot"
+                text = "Forgot?"
             )
 
             if (viewModel.showPasswordError) {
@@ -148,7 +151,7 @@ fun LoginPage(
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 200.dp),
+                    .padding(top = 150.dp),
 
                 enabled = !viewModel.isLoading,
 
@@ -172,36 +175,50 @@ fun LoginPage(
                 }
             }
 
-            GoogleLoginButton(
-                onLogin = {
-                    onLoginSuccess()
-                }
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp)
 
-            FacebookLoginButton(
-                onTokenReceived = { token ->
-                    viewModel.loginWithFacebook(token,
-                        onFacebookLoginSuccess = {
-                            onLoginSuccess()
-                        })
-                }
-            )
+            ) {
+                GoogleLoginButton(
+                    modifier = Modifier.weight(0.5f),
+                    onLogin = {
+                        onLoginSuccess()
+                    },
+                )
+
+                Spacer(modifier = Modifier
+                    .width(10.dp))
+
+                FacebookLoginButton(
+                    modifier = Modifier.weight(0.5f),
+                    onTokenReceived = { token ->
+                        viewModel.loginWithFacebook(token,
+                            onFacebookLoginSuccess = {
+                                onLoginSuccess()
+                            })
+                    }
+                )
+            }
 
             HorizontalDivider(
                 modifier = Modifier
                     .padding(
-                        top = 20.dp
+                        top = 50.dp
                     )
             )
 
             Row(modifier = Modifier
-                .padding(top = 20.dp)) {
+                .padding(top = 20.dp,
+                    bottom = 20.dp)) {
 
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterVertically),
                     text = "Need a new account?",
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
                 )
 
                 Spacer(modifier = Modifier.width(10.dp))
