@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.github
 
 object GithubCallbackRoute {
     const val ROUTE = "github_callback"

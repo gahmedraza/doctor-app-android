@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.facebook
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.material3.Button

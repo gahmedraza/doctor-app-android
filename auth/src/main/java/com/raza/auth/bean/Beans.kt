@@ -74,3 +74,7 @@ class GithubLoginResponse {
 
     var userId: String? = null
 }
+
+sealed class UiEvent {
+    data class ShowSnackbar(val message: String) : UiEvent()
+}

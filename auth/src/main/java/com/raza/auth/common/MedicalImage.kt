@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
@@ -14,11 +14,14 @@ import androidx.compose.ui.unit.dp
 import com.raza.auth.R
 
 @Composable
-fun MedicalImage(topPadding: Dp = 30.dp) {
+fun MedicalImage(
+    topPadding: Dp = 30.dp,
+    resourceId: Int? = R.drawable.baseline_medical_services_24) {
+
     Image(
         painter = painterResource(
-            id =
-                R.drawable.baseline_medical_services_24
+            id = resourceId!!
+
         ),
         contentDescription = "login icon",
         modifier = Modifier

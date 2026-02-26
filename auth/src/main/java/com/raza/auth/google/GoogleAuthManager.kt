@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.google
 
 import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignIn

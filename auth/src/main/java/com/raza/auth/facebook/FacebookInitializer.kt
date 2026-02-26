@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.facebook
 
 import android.app.Application
 import android.content.Context
@@ -21,7 +21,7 @@ object FacebookInitializer {
                     FacebookSdk.setAutoInitEnabled(true)
                     FacebookSdk.sdkInitialize(context)
                     FacebookSdk.fullyInitialize()
-                    AppEventsLogger.activateApp(context as Application)
+                    AppEventsLogger.Companion.activateApp(context as Application)
                     initialized = true
 
                     /*if(FacebookSdk.isInitialized()) {

@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.google
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,7 +15,7 @@ import com.raza.auth.theme.AuthTheme
 @Composable
 fun GoogleLoginButton(
     modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = viewModel(),
+    viewModel: GoogleViewModel = viewModel(),
     onLogin: () -> Unit
 ) {
     val context = LocalContext.current

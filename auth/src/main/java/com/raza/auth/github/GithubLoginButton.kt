@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.github
 
 import android.content.Context
 import android.content.Intent

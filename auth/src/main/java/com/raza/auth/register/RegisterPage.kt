@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.register
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,12 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.raza.auth.common.MedicalImage
 
 @Composable
 fun RegisterPage(
     onRegisterSuccess: () -> Unit,
     onLogin: () -> Unit,
-    viewModel: AuthViewModel = viewModel()
+    viewModel: RegisterViewModel = viewModel()
 ) {
     Scaffold { padding ->
         Column(

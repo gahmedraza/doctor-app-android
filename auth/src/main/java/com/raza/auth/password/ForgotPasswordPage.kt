@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.password
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun ForgotPasswordScreen(onResetPassword: (String) -> Unit,
-                         viewModel: AuthViewModel = viewModel()) {
+fun ForgotPasswordPage(onResetPassword: (String) -> Unit,
+                       viewModel: PasswordViewModel = viewModel()) {
     Scaffold { padding ->
         Column(
             modifier = Modifier

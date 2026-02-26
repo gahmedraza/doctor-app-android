@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.common
 
 const val API_KEY = "reqres_1377da5d7b4e4620b44f573493bca1a9"
 

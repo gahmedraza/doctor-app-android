@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.login
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -31,6 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.raza.auth.common.MedicalImage
+import com.raza.auth.bean.UiEvent
+import com.raza.auth.facebook.FacebookLoginButton
+import com.raza.auth.github.GithubLoginButton
+import com.raza.auth.google.GoogleLoginButton
 import com.raza.auth.theme.AuthTheme
 
 @Composable
@@ -38,7 +43,7 @@ fun LoginPage(
     onLoginSuccess: () -> Unit,
     onRegister: () -> Unit,
     onForgotPassword: () -> Unit,
-    viewModel: AuthViewModel = viewModel()
+    viewModel: LoginViewModel = viewModel()
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -46,7 +51,7 @@ fun LoginPage(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when(event) {
-                is AuthViewModel.UiEvent.ShowSnackbar -> {
+                is UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(event.message)
                 }
             }
@@ -194,7 +199,8 @@ fun LoginPage(
                 FacebookLoginButton(
                     modifier = Modifier.weight(0.33f),
                     onTokenReceived = { token ->
-                        viewModel.loginWithFacebook(token,
+                        viewModel.loginWithFacebook(
+                            token,
                             onFacebookLoginSuccess = {
                                 onLoginSuccess()
                             })

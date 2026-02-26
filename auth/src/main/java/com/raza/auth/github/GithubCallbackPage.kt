@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.github
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,10 +11,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun GithubCallbackScreen(
+fun GithubCallbackPage(
     code: String?,
     onGithubSuccess: () -> Unit,
-    viewModel: AuthViewModel = viewModel()
+    viewModel: GithubViewModel = viewModel()
 ) {
 
     LaunchedEffect(code) {

@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.password
 
 import com.raza.auth.navigation.AuthDestinations
 

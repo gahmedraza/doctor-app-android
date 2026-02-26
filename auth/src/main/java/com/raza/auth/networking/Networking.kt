@@ -1,12 +1,18 @@
 package com.raza.auth.networking
 
-import com.raza.auth.auth.FORGOT_PASSWORD_URL
-import com.raza.auth.auth.GOOGLE_AUTH_URL
-import com.raza.auth.auth.LOGIN_URL
-import com.raza.auth.auth.REGISTER_URL
-import com.raza.auth.auth.RESET_PASSWORD_URL
+import com.raza.auth.common.FACEBOOK_AUTH_URL
+import com.raza.auth.common.FORGOT_PASSWORD_URL
+import com.raza.auth.common.GITHUB_AUTH_URL
+import com.raza.auth.common.GOOGLE_AUTH_URL
+import com.raza.auth.common.LOGIN_URL
+import com.raza.auth.common.REGISTER_URL
+import com.raza.auth.common.RESET_PASSWORD_URL
+import com.raza.auth.bean.FacebookLoginRequest
+import com.raza.auth.bean.FacebookLoginResponse
 import com.raza.auth.bean.ForgotPasswordRequest
 import com.raza.auth.bean.ForgotPasswordResponse
+import com.raza.auth.bean.GithubLoginRequest
+import com.raza.auth.bean.GithubLoginResponse
 import com.raza.auth.bean.GoogleSignInRequest
 import com.raza.auth.bean.GoogleSignInResponse
 import com.raza.auth.bean.LoginRequest
@@ -47,4 +53,19 @@ fun makeGoogleSignInCall(request: GoogleSignInRequest):
         Result<GoogleSignInResponse> {
     return makeNetworkRequest(GOOGLE_AUTH_URL, request,
         RequestType.POST, GoogleSignInResponse::class.java)
+}
+
+fun makeFacebookLoginCall(request: FacebookLoginRequest): Result<FacebookLoginResponse> {
+    return makeNetworkRequest(FACEBOOK_AUTH_URL,
+        request,
+        RequestType.POST,
+        FacebookLoginResponse::class.java
+    )
+}
+
+fun makeGithubLoginCall(request: GithubLoginRequest): Result<GithubLoginResponse> {
+    return makeNetworkRequest(GITHUB_AUTH_URL,
+        request,
+        RequestType.POST,
+        GithubLoginResponse::class.java)
 }

@@ -8,14 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.raza.auth.auth.ForgotPasswordScreen
-import com.raza.auth.auth.GithubCallbackRoute
-import com.raza.auth.auth.GithubCallbackScreen
-import com.raza.auth.auth.LoginPage
-import com.raza.auth.auth.OtpPage
-import com.raza.auth.auth.RegisterPage
-import com.raza.auth.auth.ResetPasswordRoute
-import com.raza.auth.auth.ResetPasswordScreen
+import com.raza.auth.password.ForgotPasswordPage
+import com.raza.auth.github.GithubCallbackRoute
+import com.raza.auth.github.GithubCallbackPage
+import com.raza.auth.login.LoginPage
+import com.raza.auth.password.OtpPage
+import com.raza.auth.register.RegisterPage
+import com.raza.auth.password.ResetPasswordRoute
+import com.raza.auth.password.ResetPasswordPage
 
 const val AUTH_NAV_GRAPH_HOME = "auth"
 fun NavGraphBuilder.authNavGraph(
@@ -39,7 +39,7 @@ fun NavGraphBuilder.authNavGraph(
                 })
         ) { backStackEntry ->
             val code = backStackEntry.arguments?.getString(GithubCallbackRoute.PARAM_CODE)
-            GithubCallbackScreen(
+            GithubCallbackPage(
                 code,
                 onGithubSuccess = {
                     homeAddress?.let { home ->
@@ -85,7 +85,7 @@ fun NavGraphBuilder.authNavGraph(
         }
 
         composable(AuthDestinations.ForgotPassword.value) {
-            ForgotPasswordScreen(
+            ForgotPasswordPage(
                 onResetPassword = { resetLink ->
                     navController.navigate(
                         resetLink.toUri()
@@ -112,7 +112,7 @@ fun NavGraphBuilder.authNavGraph(
         ) { backStackEntry ->
 
             val token = backStackEntry.arguments?.getString(ResetPasswordRoute.PARAM_TOKEN)
-            ResetPasswordScreen(token = token ?: "",
+            ResetPasswordPage(token = token ?: "",
                 onResetSuccess = {
                     navController.navigate(
                         AuthDestinations.Login.value

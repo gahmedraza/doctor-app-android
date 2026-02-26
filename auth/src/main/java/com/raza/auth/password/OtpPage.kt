@@ -1,4 +1,4 @@
-package com.raza.auth.auth
+package com.raza.auth.password
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
