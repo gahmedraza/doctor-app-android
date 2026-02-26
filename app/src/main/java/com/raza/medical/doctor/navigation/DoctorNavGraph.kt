@@ -11,11 +11,11 @@ import com.raza.medical.doctor.patientlist.PatientListScreen
 import com.raza.medical.doctor.prescriptiondetail.PrescriptionDetailScreen
 import com.raza.medical.doctor.prescriptionlist.PrescriptionListScreen
 
-const val home: String = "doctor"
+const val DOCTOR_NAV_GRAPH_HOME: String = "doctor"
 
 fun NavGraphBuilder.doctorNavGraph(navController: NavHostController) {
     navigation(
-        route = home,
+        route = DOCTOR_NAV_GRAPH_HOME,
         startDestination = Destinations.Patients.value
     ) {
 

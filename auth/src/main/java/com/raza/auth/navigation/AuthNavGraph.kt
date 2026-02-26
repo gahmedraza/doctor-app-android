@@ -9,33 +9,36 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.raza.auth.login.ForgotPasswordScreen
+import com.raza.auth.login.GithubCallbackRoute
 import com.raza.auth.login.GithubCallbackScreen
 import com.raza.auth.login.LoginPage
 import com.raza.auth.login.OtpPage
 import com.raza.auth.login.RegisterPage
+import com.raza.auth.login.ResetPasswordRoute
 import com.raza.auth.login.ResetPasswordScreen
 
+const val AUTH_NAV_GRAPH_HOME = "auth"
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
     homeAddress: String?) {
 
     navigation(
-        route = "auth",
+        route = AUTH_NAV_GRAPH_HOME,
         startDestination = AuthDestinations.Login.value
     ) {
 
         composable(
-            route = "github_callback?code={code}",
+            route = GithubCallbackRoute.routePattern,
             arguments = listOf(
-                navArgument("code") {
+                navArgument(GithubCallbackRoute.PARAM_CODE) {
                     type = NavType.StringType
                 }),
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = "yourapp://oauth?code={code}"
+                    uriPattern = GithubCallbackRoute.deepLinkPattern
                 })
         ) { backStackEntry ->
-            val code = backStackEntry.arguments?.getString("code")
+            val code = backStackEntry.arguments?.getString(GithubCallbackRoute.PARAM_CODE)
             GithubCallbackScreen(
                 code,
                 onGithubSuccess = {
@@ -92,10 +95,10 @@ fun NavGraphBuilder.authNavGraph(
         }
 
         composable(
-            "${AuthDestinations.ResetPassword.value}?token={token}",
+            ResetPasswordRoute.routePattern,
             arguments = listOf(
                 navArgument(
-                    "token"
+                    ResetPasswordRoute.PARAM_TOKEN
                 ) {
                     type = NavType.StringType
                     nullable = true
@@ -103,12 +106,12 @@ fun NavGraphBuilder.authNavGraph(
             ),
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = "myapp://${AuthDestinations.ResetPassword.value}?token={token}"
+                    uriPattern = ResetPasswordRoute.deepLinkPattern
                 }
             )
         ) { backStackEntry ->
 
-            val token = backStackEntry.arguments?.getString("token")
+            val token = backStackEntry.arguments?.getString(ResetPasswordRoute.PARAM_TOKEN)
             ResetPasswordScreen(token = token ?: "",
                 onResetSuccess = {
                     navController.navigate(
