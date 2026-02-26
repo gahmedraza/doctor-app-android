@@ -25,7 +25,7 @@ fun NavGraphBuilder.authNavGraph(
     ) {
 
         composable(
-            route = "github_callback?code={code",
+            route = "github_callback?code={code}",
             arguments = listOf(
                 navArgument("code") {
                     type = NavType.StringType

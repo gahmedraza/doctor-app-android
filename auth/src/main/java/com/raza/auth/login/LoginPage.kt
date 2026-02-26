@@ -183,7 +183,7 @@ fun LoginPage(
 
             ) {
                 GoogleLoginButton(
-                    modifier = Modifier.weight(0.5f),
+                    modifier = Modifier.weight(0.33f),
                     onLogin = {
                         onLoginSuccess()
                     },
@@ -193,7 +193,7 @@ fun LoginPage(
                     .width(10.dp))
 
                 FacebookLoginButton(
-                    modifier = Modifier.weight(0.5f),
+                    modifier = Modifier.weight(0.33f),
                     onTokenReceived = { token ->
                         viewModel.loginWithFacebook(token,
                             onFacebookLoginSuccess = {
@@ -206,6 +206,7 @@ fun LoginPage(
                     .width(10.dp))
 
                 GithubLoginButton(
+                    modifier = Modifier.weight(0.33f),
                     LocalContext.current
                 )
             }

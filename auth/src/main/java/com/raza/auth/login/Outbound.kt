@@ -14,6 +14,8 @@ const val GOOGLE = "google"
 
 const val FACEBOOK = "facebook"
 
+const val GITHUB = "github"
+
 const val FORGOT_PASSWORD = "forgot-password"
 
 const val RESET_PASSWORD = "reset-password"
@@ -28,3 +30,5 @@ const val RESET_PASSWORD_URL = "$BASE_URL/$AUTH/$RESET_PASSWORD"
 const val GOOGLE_AUTH_URL = "$BASE_URL/$AUTH/$GOOGLE"
 
 const val FACEBOOK_AUTH_URL = "$BASE_URL/$AUTH/$FACEBOOK"
+
+const val GITHUB_AUTH_URL = "$BASE_URL/$AUTH/$GITHUB"

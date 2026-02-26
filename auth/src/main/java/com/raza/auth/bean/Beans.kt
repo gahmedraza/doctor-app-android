@@ -78,3 +78,14 @@ class FacebookLoginResponse{
 
     var id: String? = null
 }
+
+class GithubLoginRequest: Request {
+    var code: String? = null
+}
+
+class GithubLoginResponse {
+
+    var token: String? = null
+
+    var userId: String? = null
+}

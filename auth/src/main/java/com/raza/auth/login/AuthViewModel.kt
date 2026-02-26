@@ -11,6 +11,8 @@ import com.google.android.gms.common.api.ApiException
 import com.raza.auth.bean.FacebookLoginRequest
 import com.raza.auth.bean.FacebookLoginResponse
 import com.raza.auth.bean.ForgotPasswordRequest
+import com.raza.auth.bean.GithubLoginRequest
+import com.raza.auth.bean.GithubLoginResponse
 import com.raza.auth.bean.GoogleSignInRequest
 import com.raza.auth.bean.LoginRequest
 import com.raza.auth.bean.LoginResponse
@@ -27,6 +29,7 @@ import com.raza.auth.networking.makeNetworkRequest
 import com.raza.auth.networking.makeRegisterCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -278,6 +281,26 @@ class AuthViewModel : ViewModel() {
             try {
                 isLoading = true
 
+                val request = GithubLoginRequest()
+                request.code = token
+
+                val response = withContext(
+                    Dispatchers.IO
+                ) {
+                    makeGithubLoginCall(request)
+                }
+
+                when(response) {
+                    is Result.Success -> {
+                        onGithubSuccess()
+                    }
+                    is Result.Failure -> {
+
+                    }
+                }
+            } catch (e: Exception) {
+                Logger.w("${e.printStackTrace()}")
+                events.emit(UiEvent.ShowSnackbar("${e.message}"))
             } finally {
 
                 isLoading = false
@@ -291,5 +314,12 @@ class AuthViewModel : ViewModel() {
             RequestType.POST,
             FacebookLoginResponse::class.java
             )
+    }
+
+    fun makeGithubLoginCall(request: GithubLoginRequest): Result<GithubLoginResponse> {
+        return makeNetworkRequest(GITHUB_AUTH_URL,
+            request,
+            RequestType.POST,
+            GithubLoginResponse::class.java)
     }
 }
