@@ -1,4 +1,4 @@
-package com.raza.auth.login
+package com.raza.auth.auth
 
 class Validator {
     var showError: Boolean = false

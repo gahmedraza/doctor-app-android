@@ -1,4 +1,4 @@
-package com.raza.auth.login
+package com.raza.auth.auth
 
 import android.content.Intent
 import androidx.compose.runtime.getValue
@@ -17,19 +17,18 @@ import com.raza.auth.bean.GoogleSignInRequest
 import com.raza.auth.bean.LoginRequest
 import com.raza.auth.bean.LoginResponse
 import com.raza.auth.bean.RegisterRequest
-import com.raza.auth.bean.RequestType
+import com.raza.networking.bean.RequestType
 import com.raza.auth.bean.ResetPasswordRequest
-import com.raza.auth.bean.Result
+import com.raza.networking.bean.Result
 import com.raza.logger.Logger
 import com.raza.auth.networking.callForgotPasswordApi
 import com.raza.auth.networking.callResetPasswordApi
 import com.raza.auth.networking.makeGoogleSignInCall
 import com.raza.auth.networking.makeLoginCall
-import com.raza.auth.networking.makeNetworkRequest
 import com.raza.auth.networking.makeRegisterCall
+import com.raza.networking.makeNetworkRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

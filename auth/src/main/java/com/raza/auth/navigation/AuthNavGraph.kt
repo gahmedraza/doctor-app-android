@@ -8,14 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.raza.auth.login.ForgotPasswordScreen
-import com.raza.auth.login.GithubCallbackRoute
-import com.raza.auth.login.GithubCallbackScreen
-import com.raza.auth.login.LoginPage
-import com.raza.auth.login.OtpPage
-import com.raza.auth.login.RegisterPage
-import com.raza.auth.login.ResetPasswordRoute
-import com.raza.auth.login.ResetPasswordScreen
+import com.raza.auth.auth.ForgotPasswordScreen
+import com.raza.auth.auth.GithubCallbackRoute
+import com.raza.auth.auth.GithubCallbackScreen
+import com.raza.auth.auth.LoginPage
+import com.raza.auth.auth.OtpPage
+import com.raza.auth.auth.RegisterPage
+import com.raza.auth.auth.ResetPasswordRoute
+import com.raza.auth.auth.ResetPasswordScreen
 
 const val AUTH_NAV_GRAPH_HOME = "auth"
 fun NavGraphBuilder.authNavGraph(

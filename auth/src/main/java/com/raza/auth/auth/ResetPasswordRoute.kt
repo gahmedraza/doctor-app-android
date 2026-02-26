@@ -1,7 +1,6 @@
-package com.raza.auth.login
+package com.raza.auth.auth
 
 import com.raza.auth.navigation.AuthDestinations
-import com.raza.auth.navigation.Params
 
 object ResetPasswordRoute {
     val DESTINATION = AuthDestinations.ResetPassword.value

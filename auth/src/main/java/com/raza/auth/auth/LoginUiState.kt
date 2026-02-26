@@ -1,4 +1,4 @@
-package com.raza.auth.login
+package com.raza.auth.auth
 
 class LoginUiState {
     var username: String? = null

@@ -1,17 +1,7 @@
 package com.raza.auth.bean
 
-enum class RequestType(val value: String) {
-    GET("GET"),
-    POST("POST")
-}
+import com.raza.networking.bean.Request
 
-enum class HeaderKeys(val value: String) {
-    API_KEY("x-api-key")
-}
-
-interface Request {
-
-}
 
 class ForgotPasswordRequest: Request {
     var email: String? = null
@@ -62,11 +52,6 @@ class GoogleSignInResponse {
     var userId: String? = null
     var accessToken: String? = null
     var refreshToken: String? = null
-}
-
-sealed class Result<out T> {
-    data class Failure(val error: String?): Result<Nothing>()
-    data class Success<out T>(val data: T?): Result<T>()
 }
 
 class FacebookLoginRequest: Request {

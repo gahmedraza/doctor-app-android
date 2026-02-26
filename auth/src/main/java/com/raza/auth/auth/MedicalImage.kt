@@ -1,4 +1,4 @@
-package com.raza.auth.login
+package com.raza.auth.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
