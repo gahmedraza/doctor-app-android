@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "878270989450",
+    "project_id": "medical-auth-app-3803a",
+    "storage_bucket": "medical-auth-app-3803a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878270989450:android:a9f1e638fc2a7dd1431973",
+        "android_client_info": {
+          "package_name": "com.raza.medical.doctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878270989450-u1bffnniaq3ujqtneolsog3m5mf0vvsm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.raza.medical.doctor",
+            "certificate_hash": "84facc77bb61d58976e78794ab3e098133a9dd9f"
+          }
+        },
+        {
+          "client_id": "878270989450-uoiusi71bi9eb24vh1h4o5b0tq90bkmv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw_Q_0xRZSXeZNYj0bbHElRdq4ThTtNDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878270989450-uoiusi71bi9eb24vh1h4o5b0tq90bkmv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,19 @@
+package com.raza.logger
+
+import android.util.Log
+
+/**
+ * Ignore from test reports
+ */
+
+const val DEFAULT_TAG = "debug"
+
+object Logger {
+    fun w(
+        message: String?,
+        tag: String = DEFAULT_TAG
+    ) {
+
+        Log.w(tag, message ?: "--------")
+    }
+}

@@ -22,3 +22,7 @@ dependencyResolutionManagement {
 rootProject.name = "doctor-app-android"
 include(":app")
 include(":medical-common-lib")
+include(":plugin")
+include(":auth")
+include(":logger")
+include(":networking")

@@ -1,0 +1,131 @@
+package com.raza.auth.navigation
+
+import androidx.core.net.toUri
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
+import com.raza.auth.password.ForgotPasswordPage
+import com.raza.auth.github.GithubCallbackRoute
+import com.raza.auth.github.GithubCallbackPage
+import com.raza.auth.login.LoginPage
+import com.raza.auth.password.OtpPage
+import com.raza.auth.register.RegisterPage
+import com.raza.auth.password.ResetPasswordRoute
+import com.raza.auth.password.ResetPasswordPage
+
+const val AUTH_NAV_GRAPH_HOME = "auth"
+fun NavGraphBuilder.authNavGraph(
+    navController: NavHostController,
+    homeAddress: String?) {
+
+    navigation(
+        route = AUTH_NAV_GRAPH_HOME,
+        startDestination = AuthDestinations.Login.value
+    ) {
+
+        composable(
+            route = GithubCallbackRoute.routePattern,
+            arguments = listOf(
+                navArgument(GithubCallbackRoute.PARAM_CODE) {
+                    type = NavType.StringType
+                }),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = GithubCallbackRoute.deepLinkPattern
+                })
+        ) { backStackEntry ->
+            val code = backStackEntry.arguments?.getString(GithubCallbackRoute.PARAM_CODE)
+            GithubCallbackPage(
+                code,
+                onGithubSuccess = {
+                    homeAddress?.let { home ->
+                        navController.navigate(home)
+                    }
+                })
+        }
+
+        composable(AuthDestinations.Login.value) {
+            LoginPage(
+                onLoginSuccess = {
+                    homeAddress?.let { home ->
+                        navController.navigate(home)
+                    }
+
+                },
+                onRegister = {
+                    navController.navigate(AuthDestinations.Register.value)
+                },
+                onForgotPassword = {
+                    navController.navigate(AuthDestinations.ForgotPassword.value)
+                }
+            )
+        }
+
+        composable(AuthDestinations.Register.value) {
+            RegisterPage(
+                onRegisterSuccess = {
+                    navController.navigate(AuthDestinations.VerifyOtp.value)
+                },
+                onLogin = {
+                    navController.navigate(AuthDestinations.Login.value)
+                }
+            )
+        }
+
+        composable(AuthDestinations.VerifyOtp.value) {
+            OtpPage(
+                onOtpComplete = { otp ->
+                    navController.navigate(AuthDestinations.Login.value)
+                }
+            )
+        }
+
+        composable(AuthDestinations.ForgotPassword.value) {
+            ForgotPasswordPage(
+                onResetPassword = { resetLink ->
+                    navController.navigate(
+                        resetLink.toUri()
+                    )
+                }
+            )
+        }
+
+        composable(
+            ResetPasswordRoute.routePattern,
+            arguments = listOf(
+                navArgument(
+                    ResetPasswordRoute.PARAM_TOKEN
+                ) {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            ),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = ResetPasswordRoute.deepLinkPattern
+                }
+            )
+        ) { backStackEntry ->
+
+            val token = backStackEntry.arguments?.getString(ResetPasswordRoute.PARAM_TOKEN)
+            ResetPasswordPage(token = token ?: "",
+                onResetSuccess = {
+                    navController.navigate(
+                        AuthDestinations.Login.value
+                    )
+                })
+        }
+    }
+}
+
+enum class AuthDestinations(val value: String) {
+    ForgotPassword("forgotPassword"),
+    ResetPassword("resetPassword"),
+    VerifyOtp("verifyOtp"),
+    Register("register"),
+    Login("login")
+}
